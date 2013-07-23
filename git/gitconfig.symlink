@@ -7,7 +7,7 @@
         name = Christian Stadach
         email = christian@stadach.com
 [credential]
-        helper = GIT_CREDENTIAL_HELPER
+	helper = osxkeychain
 [alias]
         st = "!git_stash_checker.sh; git status"
         ci = commit
