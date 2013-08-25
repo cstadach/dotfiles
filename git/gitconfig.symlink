@@ -9,7 +9,7 @@
 [credential]
 	helper = osxkeychain
 [alias]
-        st = "!git_stash_checker.sh; git status"
+        st = status
         ci = commit
         co = checkout
         di = diff

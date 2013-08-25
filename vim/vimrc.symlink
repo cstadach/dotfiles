@@ -69,7 +69,7 @@ let mapleader=","
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has('mac')
   syntax enable
-  :set background=light
+  :set background=dark
   :let g:solarized_termcolors=256
   :colorscheme solarized
 elseif has('unix')
@@ -86,9 +86,6 @@ set encoding=utf-8
 set showcmd                     " display incomplete commands
 filetype plugin indent on       " load file type plugins + indentation
 set number
-
-set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "" HTML Indentation
 " This must be loaded manually since vim doesn't seem to
@@ -136,8 +133,12 @@ if has("autocmd")
 endif
 
 " List chars
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+
+set listchars=tab:▸\ ,eol:¬
 set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+set listchars=tab:▸\              " a tab should display as "  ", trailing whitespace as "."
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
