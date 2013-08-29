@@ -45,8 +45,8 @@ filetype off                   " required!
  Bundle 'airblade/vim-gitgutter.git'
  Bundle 'greyblake/vim-preview.git'
  " vim-scripts repos
- " Bundle 'L9'
- " Bundle 'FuzzyFinder'
+ Bundle 'L9'
+ Bundle 'FuzzyFinder'
 
 
 set nobackup
