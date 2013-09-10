@@ -18,25 +18,25 @@ filetype off                   " required!
  Bundle 'tpope/vim-endwise.git'
  Bundle 'tpope/vim-surround.git'
  Bundle 'tpope/vim-bundler.git'
- Bundle 'tpope/vim-cucumber.git'
- Bundle 'tpope/vim-haml.git'
- Bundle 'tpope/vim-markdown.git'
- Bundle 'cakebaker/scss-syntax.vim.git'
+ " Bundle 'tpope/vim-cucumber.git'
+ " Bundle 'tpope/vim-haml.git'
+ " Bundle 'tpope/vim-markdown.git'
+ " Bundle 'cakebaker/scss-syntax.vim.git'
  Bundle 'mileszs/ack.vim.git'
  Bundle 'ervandew/supertab.git'
  Bundle 'pangloss/vim-javascript.git'
- Bundle 'kchmck/vim-coffee-script.git'
+ " Bundle 'kchmck/vim-coffee-script.git'
  Bundle 'ap/vim-css-color.git'
- Bundle 'mmalecki/vim-node.js.git'
- Bundle 'ajf/puppet-vim.git'
+ " Bundle 'mmalecki/vim-node.js.git'
+ " Bundle 'ajf/puppet-vim.git'
  Bundle 'skwp/vim-rspec.git'
  Bundle 'hail2u/vim-css3-syntax.git'
- Bundle 'groenewege/vim-less.git'
+ " Bundle 'groenewege/vim-less.git'
  Bundle 'vim-ruby/vim-ruby.git'
- Bundle 'benmills/vimux.git'
+ " Bundle 'benmills/vimux.git'
  Bundle 'sjl/vitality.vim.git'
- Bundle 'sjl/clam.vim.git'
- Bundle 'sjl/badwolf.git'
+ " Bundle 'sjl/clam.vim.git'
+ " Bundle 'sjl/badwolf.git'
  Bundle 'altercation/vim-colors-solarized.git'
  Bundle 'oguzbilgic/sexy-railscasts-theme.git'
  Bundle 'wincent/Command-T.git'
@@ -45,8 +45,9 @@ filetype off                   " required!
  Bundle 'airblade/vim-gitgutter.git'
  Bundle 'greyblake/vim-preview.git'
  " vim-scripts repos
- Bundle 'L9'
- Bundle 'FuzzyFinder'
+ " Bundle 'L9'
+ " Bundle 'FuzzyFinder'
+
 
 set nobackup
 set noswapfile
@@ -63,7 +64,7 @@ let mapleader=","
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has('mac')
   syntax enable
-  :set background=dark
+  :set background=light
   :let g:solarized_termcolors=256
   :colorscheme solarized
 elseif has('unix')
@@ -80,6 +81,9 @@ set encoding=utf-8
 set showcmd                     " display incomplete commands
 filetype plugin indent on       " load file type plugins + indentation
 set number
+
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "" HTML Indentation
 " This must be loaded manually since vim doesn't seem to
@@ -127,12 +131,8 @@ if has("autocmd")
 endif
 
 " List chars
-set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
-
-set listchars=tab:▸\ ,eol:¬
 set listchars=""                  " Reset the listchars
-set listchars=tab:▸\              " a tab should display as "  ", trailing whitespace as "."
+set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
