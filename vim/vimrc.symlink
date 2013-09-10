@@ -42,7 +42,7 @@ filetype off                   " required!
  Bundle 'wincent/Command-T.git'
  Bundle 'vim-scripts/ZoomWin.git'
  Bundle 'kien/ctrlp.vim.git'
- Bundle 'airblade/vim-gitgutter.git'
+ " Bundle 'airblade/vim-gitgutter.git'
  Bundle 'greyblake/vim-preview.git'
  " vim-scripts repos
  Bundle 'L9'
@@ -130,12 +130,13 @@ if has("autocmd")
   au BufRead,BufNewFile *.html source ~/.vim/indent/html_grb.vim
 endif
 
-" List chars
+set list
 set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
-set listchars+=trail:.            " show trailing spaces as dots
-set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
+set listchars=nbsp:¬
+set listchars+=tab:>-
+set listchars+=extends:»
+set listchars+=precedes:«
+set listchars+=trail:•
 set listchars+=precedes:<         " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
 " provide some context when editing
