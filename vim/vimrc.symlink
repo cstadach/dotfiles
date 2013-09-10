@@ -82,8 +82,6 @@ set showcmd                     " display incomplete commands
 filetype plugin indent on       " load file type plugins + indentation
 set number
 
-set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
 
 "" HTML Indentation
 " This must be loaded manually since vim doesn't seem to
@@ -129,6 +127,7 @@ if has("autocmd")
 
   au BufRead,BufNewFile *.html source ~/.vim/indent/html_grb.vim
 endif
+
 
 set list
 set listchars=""                  " Reset the listchars
