@@ -89,3 +89,5 @@
 	prompt = false
 [merge]
 	tool = Kaleidoscope
+[init]
+	templatedir = ~/.git_template
