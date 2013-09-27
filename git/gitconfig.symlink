@@ -50,6 +50,7 @@
         wtf     = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
+	ctags = !.git/hooks/ctags
 [branch]
         autosetupmerge = true
 [color]
@@ -89,3 +90,5 @@
 	prompt = false
 [merge]
 	tool = Kaleidoscope
+[init]
+	templatedir = ~/.git_template
