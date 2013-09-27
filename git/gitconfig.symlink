@@ -50,6 +50,7 @@
         wtf     = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
+	ctags = !.git/hooks/ctags
 [branch]
         autosetupmerge = true
 [color]
@@ -74,3 +75,5 @@
 	default = simple
 [diff]
 external = git-meld
+[init]
+	templatedir = ~/.git_template
