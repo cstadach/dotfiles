@@ -194,6 +194,7 @@ map <silent><leader>z :ZoomWin<CR>
 
 map <silent><leader>f :CtrlP<CR>
 
+nmap tt <c-]>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SEARCH IN VMODE FOR MARKED WORDS
 " Search for selected text, forwards or backwards.
