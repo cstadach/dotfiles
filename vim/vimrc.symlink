@@ -12,38 +12,26 @@ filetype off                   " required!
  " My Bundles here:
  "
  " original repos on github
+ Bundle 'tpope/vim-unimpaired.git'
  Bundle 'tpope/vim-fugitive'
+ Bundle 'tpope/vim-bundler.git'
  Bundle 'tpope/vim-rails.git'
  Bundle 'tpope/vim-commentary.git'
  Bundle 'tpope/vim-endwise.git'
  Bundle 'tpope/vim-surround.git'
- Bundle 'tpope/vim-bundler.git'
- " Bundle 'tpope/vim-cucumber.git'
- " Bundle 'tpope/vim-haml.git'
- " Bundle 'tpope/vim-markdown.git'
- " Bundle 'cakebaker/scss-syntax.vim.git'
+ Bundle 'tpope/vim-rake.git'
  Bundle 'mileszs/ack.vim.git'
  Bundle 'ervandew/supertab.git'
  Bundle 'pangloss/vim-javascript.git'
- " Bundle 'kchmck/vim-coffee-script.git'
  Bundle 'ap/vim-css-color.git'
- " Bundle 'mmalecki/vim-node.js.git'
- " Bundle 'ajf/puppet-vim.git'
  Bundle 'skwp/vim-rspec.git'
  Bundle 'hail2u/vim-css3-syntax.git'
- " Bundle 'groenewege/vim-less.git'
  Bundle 'vim-ruby/vim-ruby.git'
- " Bundle 'benmills/vimux.git'
  Bundle 'sjl/vitality.vim.git'
- " Bundle 'sjl/clam.vim.git'
- " Bundle 'sjl/badwolf.git'
  Bundle 'altercation/vim-colors-solarized.git'
- Bundle 'oguzbilgic/sexy-railscasts-theme.git'
  Bundle 'wincent/Command-T.git'
  Bundle 'vim-scripts/ZoomWin.git'
  Bundle 'kien/ctrlp.vim.git'
- " Bundle 'airblade/vim-gitgutter.git'
- Bundle 'greyblake/vim-preview.git'
  " vim-scripts repos
  Bundle 'L9'
  Bundle 'FuzzyFinder'
@@ -135,8 +123,7 @@ set listchars+=tab:>-
 set listchars+=extends:»
 set listchars+=precedes:«
 set listchars+=trail:•
-set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
+"
 " provide some context when editing
 set scrolloff=3
 
@@ -199,34 +186,18 @@ if has("statusline") && !&cp
   set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 endif
 
-"" Creating New Tabs
-nmap <silent><leader>t :tabnew<CR>
-
-"" Creating New Tabs
-nnoremap <silent><leader>b <C-]>
-""nmap <silent><leader>b :<C-]>
-
 " Indent p tags
 autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
 
 ""ZoomWin
 map <silent><leader>z :ZoomWin<CR>
 
-"" Mapping for Preview
-nmap <Leader>p :Preview<CR>
-
-"" Syntax Highlighting
-" Show syntax highlighting groups for word under cursor
-nmap <C-S-s> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
 map <silent><leader>f :CtrlP<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SEARCH IN VMODE FOR MARKED WORDS
 " Search for selected text, forwards or backwards.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy/<C-R><C-R>=substitute(
@@ -254,18 +225,9 @@ inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ARROW KEYS ARE UNACCEPTABLE
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" map <Left> :echo "no!"<cr>
-" map <Right> :echo "no!"<cr>
-" map <Up> :echo "no!"<cr>
-" map <Down> :echo "no!"<cr>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " OPEN FILES IN DIRECTORY OF CURRENT FILE
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <leader>e :edit %%
 map <leader>v :view %%
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
