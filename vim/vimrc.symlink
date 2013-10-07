@@ -2,39 +2,39 @@
 set nocp
 filetype off                   " required!
 
- set rtp+=~/.vim/bundle/vundle/
- call vundle#rc()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
- " let Vundle manage Vundle
- " required!
- Bundle 'gmarik/vundle'
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
 
- " My Bundles here:
- "
- " original repos on github
- Bundle 'tpope/vim-unimpaired.git'
- Bundle 'tpope/vim-fugitive'
- Bundle 'tpope/vim-bundler.git'
- Bundle 'tpope/vim-rails.git'
- Bundle 'tpope/vim-commentary.git'
- Bundle 'tpope/vim-endwise.git'
- Bundle 'tpope/vim-surround.git'
- Bundle 'tpope/vim-rake.git'
- Bundle 'mileszs/ack.vim.git'
- Bundle 'ervandew/supertab.git'
- Bundle 'pangloss/vim-javascript.git'
- Bundle 'ap/vim-css-color.git'
- Bundle 'skwp/vim-rspec.git'
- Bundle 'hail2u/vim-css3-syntax.git'
- Bundle 'vim-ruby/vim-ruby.git'
- Bundle 'sjl/vitality.vim.git'
- Bundle 'altercation/vim-colors-solarized.git'
- Bundle 'wincent/Command-T.git'
- Bundle 'vim-scripts/ZoomWin.git'
- Bundle 'kien/ctrlp.vim.git'
- " vim-scripts repos
- Bundle 'L9'
- Bundle 'FuzzyFinder'
+" My Bundles here:
+"
+" original repos on github
+Bundle 'tpope/vim-unimpaired.git'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-bundler.git'
+Bundle 'tpope/vim-rails.git'
+Bundle 'tpope/vim-commentary.git'
+Bundle 'tpope/vim-endwise.git'
+Bundle 'tpope/vim-surround.git'
+Bundle 'tpope/vim-rake.git'
+Bundle 'mileszs/ack.vim.git'
+Bundle 'ervandew/supertab.git'
+Bundle 'pangloss/vim-javascript.git'
+Bundle 'ap/vim-css-color.git'
+Bundle 'skwp/vim-rspec.git'
+Bundle 'hail2u/vim-css3-syntax.git'
+Bundle 'vim-ruby/vim-ruby.git'
+Bundle 'sjl/vitality.vim.git'
+Bundle 'altercation/vim-colors-solarized.git'
+Bundle 'wincent/Command-T.git'
+Bundle 'vim-scripts/ZoomWin.git'
+Bundle 'kien/ctrlp.vim.git'
+" vim-scripts repos
+Bundle 'L9'
+Bundle 'FuzzyFinder'
 
 
 set nobackup
@@ -95,6 +95,11 @@ function s:setupWrapping()
 endfunction
 
 if has("autocmd")
+  autocmd User fugitive
+        \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+        \   nnoremap <buffer> .. :edit %:h<CR> |
+        \ endif
+
   "  In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
 
@@ -110,7 +115,7 @@ if has("autocmd")
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g`\"" | endif
+        \| exe "normal! g`\"" | endif
 
   au BufRead,BufNewFile *.html source ~/.vim/indent/html_grb.vim
 endif
@@ -147,26 +152,26 @@ map <leader>v :view %%
 
 "" Inlining variables
 function! InlineVariable()
-    " Copy the variable under the cursor into the 'a' register
-    :let l:tmp_a = @a
-    :normal "ayiw
-    " Delete variable and equals sign
-    :normal 2daW
-    " Delete the expression into the 'b' register
-    :let l:tmp_b = @b
-    :normal "bd$
-    " Delete the remnants of the line
-    :normal dd
-    " Go to the end of the previous line so we can start our search for the
-    " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
-    " work; I'm not sure why.
-    normal k$
-    " Find the next occurence of the variable
-    exec '/\<' . @a . '\>'
-    " Replace that occurence with the text we yanked
-    exec ':.s/\<' . @a . '\>/' . @b
-    :let @a = l:tmp_a
-    :let @b = l:tmp_b
+  " Copy the variable under the cursor into the 'a' register
+  :let l:tmp_a = @a
+  :normal "ayiw
+  " Delete variable and equals sign
+  :normal 2daW
+  " Delete the expression into the 'b' register
+  :let l:tmp_b = @b
+  :normal "bd$
+  " Delete the remnants of the line
+  :normal dd
+  " Go to the end of the previous line so we can start our search for the
+  " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
+  " work; I'm not sure why.
+  normal k$
+  " Find the next occurence of the variable
+  exec '/\<' . @a . '\>'
+  " Replace that occurence with the text we yanked
+  exec ':.s/\<' . @a . '\>/' . @b
+  :let @a = l:tmp_a
+  :let @b = l:tmp_b
 endfunction
 nnoremap <leader>ri :call InlineVariable()<cr>
 
@@ -200,27 +205,27 @@ nmap tt <c-]>
 " Search for selected text, forwards or backwards.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+      \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+      \gvy/<C-R><C-R>=substitute(
+      \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+      \gV:call setreg('"', old_reg, old_regtype)<CR>
 vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(
-  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+      \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+      \gvy?<C-R><C-R>=substitute(
+      \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+      \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MULTIPURPOSE TAB KEY
 " Indent if we're at the beginning of a line. Else, do completion.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-p>"
+  endif
 endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
@@ -235,12 +240,12 @@ map <leader>v :view %%
 " RENAME CURRENT FILE
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
+  endif
 endfunction
 map <leader>n :call RenameFile()<cr>
