@@ -1,5 +1,7 @@
 "" Initialization
-set nocp
+set nocompatible
+set encoding=utf-8
+
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
@@ -33,41 +35,74 @@ Bundle 'wincent/Command-T.git'
 Bundle 'vim-scripts/ZoomWin.git'
 Bundle 'kien/ctrlp.vim.git'
 " vim-scripts repos
-Bundle 'L9'
-Bundle 'FuzzyFinder'
+Bundle 'matchit.zip'
 
+filetype plugin indent on       " load file type plugins + indentation
 
-set nobackup
-set noswapfile
-"" Clipboard
-set clipboard=unnamed
-
-set backupdir=~/.vim/_backup    " where to put backup files.
-set directory=~/.vim/_temp      " where to put swap files.
-
-let mapleader=","
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" COLOR
+" DISPLAY SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+syntax enable
+
+if has('gui-running')
+  set background=light
+else
+  set background=dark
+endif
+
 if has('mac')
-  syntax enable
-  :set background=light
   :let g:solarized_termcolors=256
   :colorscheme solarized
 elseif has('unix')
-  syntax enable
   set t_Co=16
-  set background=dark
   let g:solarized_termcolors=&t_Co
   let g:solarized_termtrans=1
   colorscheme solarized
 endif
 
-set encoding=utf-8
-set showcmd                     " display incomplete commands
-filetype plugin indent on       " load file type plugins + indentation
-set number
+set showcmd      " display incomplete commands
+set number      " line numbers
+set cursorline  " highlight the line of the cursor
+set scrolloff=3 " have some context around the current line always on screen
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" BUFFER AND FILE SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" No backups and swapfiles needed when using versioning
+set nobackup
+set noswapfile
+
+" Allow backgrounding buffers without writing them, and remember marks/undo
+" for backgrounded buffers
+set hidden
+
+" Auto-reload buffers when file changed on disk
+set autoread
+
+" Clipboard
+set clipboard=unnamed
+
+"" Whitespace and Files
+set nowrap                      " don't wrap lines
+set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
+set expandtab                   " use spaces, not tabs (optional)
+set backspace=indent,eol,start  " backspace through everything in insert mode
+set autoindent
+
+set list
+set listchars=""                  " Reset the listchars
+set listchars=nbsp:¬
+set listchars+=tab:>-
+set listchars+=extends:»
+set listchars+=precedes:«
+set listchars+=trail:•
+
+let mapleader=","
+
+
 
 
 "" HTML Indentation
@@ -81,13 +116,6 @@ hi CursorLine cterm=NONE term=NONE
 "" Mouse
 set mouse=a
 
-"" Whitespace and Files
-set nowrap                      " don't wrap lines
-set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
-set expandtab                   " use spaces, not tabs (optional)
-set backspace=indent,eol,start  " backspace through everything in insert mode
-set autoindent
-
 function s:setupWrapping()
   set wrap
   set wrapmargin=2
@@ -95,22 +123,19 @@ function s:setupWrapping()
 endfunction
 
 if has("autocmd")
+  " Indent p tags
+  autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
+
   autocmd User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
         \   nnoremap <buffer> .. :edit %:h<CR> |
         \ endif
-
-  "  In Makefiles, use real tabs, not tabs expanded to spaces
-  au FileType make set noexpandtab
 
   " Make sure all markdown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
-
-  " make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
-  au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
@@ -119,18 +144,6 @@ if has("autocmd")
 
   au BufRead,BufNewFile *.html source ~/.vim/indent/html_grb.vim
 endif
-
-
-set list
-set listchars=""                  " Reset the listchars
-set listchars=nbsp:¬
-set listchars+=tab:>-
-set listchars+=extends:»
-set listchars+=precedes:«
-set listchars+=trail:•
-"
-" provide some context when editing
-set scrolloff=3
 
 "" Searching
 set hlsearch                    " highlight matches
@@ -144,36 +157,6 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-
-"" Open files in the dir of the current file
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <leader>e :edit %%
-map <leader>v :view %%
-
-"" Inlining variables
-function! InlineVariable()
-  " Copy the variable under the cursor into the 'a' register
-  :let l:tmp_a = @a
-  :normal "ayiw
-  " Delete variable and equals sign
-  :normal 2daW
-  " Delete the expression into the 'b' register
-  :let l:tmp_b = @b
-  :normal "bd$
-  " Delete the remnants of the line
-  :normal dd
-  " Go to the end of the previous line so we can start our search for the
-  " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
-  " work; I'm not sure why.
-  normal k$
-  " Find the next occurence of the variable
-  exec '/\<' . @a . '\>'
-  " Replace that occurence with the text we yanked
-  exec ':.s/\<' . @a . '\>/' . @b
-  :let @a = l:tmp_a
-  :let @b = l:tmp_b
-endfunction
-nnoremap <leader>ri :call InlineVariable()<cr>
 
 let g:CommandTMaxHeight=15
 let g:CommandTMaxFiles=20000
@@ -190,9 +173,6 @@ if has("statusline") && !&cp
   set laststatus=2  " always show the status bar
   set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 endif
-
-" Indent p tags
-autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
 
 ""ZoomWin
 map <silent><leader>z :ZoomWin<CR>
@@ -229,23 +209,3 @@ function! InsertTabWrapper()
 endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" OPEN FILES IN DIRECTORY OF CURRENT FILE
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <leader>v :view %%
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" RENAME CURRENT FILE
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! RenameFile()
-  let old_name = expand('%')
-  let new_name = input('New file name: ', expand('%'), 'file')
-  if new_name != '' && new_name != old_name
-    exec ':saveas ' . new_name
-    exec ':silent !rm ' . old_name
-    redraw!
-  endif
-endfunction
-map <leader>n :call RenameFile()<cr>
