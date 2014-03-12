@@ -16,6 +16,7 @@ Bundle 'gmarik/vundle'
 " My Bundles here:
 "
 " original repos on github
+" Bundle 'wikitopian/hardmode'
 Bundle 'scrooloose/syntastic.git'
 Bundle 'tpope/vim-unimpaired.git'
 Bundle 'tpope/vim-abolish.git'
@@ -27,22 +28,13 @@ Bundle 'tpope/vim-commentary.git'
 Bundle 'tpope/vim-endwise.git'
 Bundle 'tpope/vim-surround.git'
 Bundle 'tpope/vim-rake.git'
-Bundle 'ecomba/vim-ruby-refactoring'
-Bundle 'kchmck/vim-coffee-script'
 Bundle 'mileszs/ack.vim.git'
 Bundle 'ervandew/supertab.git'
 Bundle 'pangloss/vim-javascript.git'
-Bundle 'ap/vim-css-color.git'
-Bundle 'skwp/vim-rspec.git'
 Bundle 'hail2u/vim-css3-syntax.git'
 Bundle 'vim-ruby/vim-ruby.git'
-Bundle 'sjl/vitality.vim.git'
 Bundle 'altercation/vim-colors-solarized.git'
-Bundle 'wincent/Command-T.git'
-Bundle 'vim-scripts/ZoomWin.git'
 Bundle 'kien/ctrlp.vim.git'
-Bundle 'rodjek/vim-puppet.git'
-Bundle 'godlygeek/tabular.git'
 " vim-scripts repos
 
 filetype plugin indent on       " load file type plugins + indentation
@@ -144,23 +136,12 @@ endif
 "" Mouse
 set mouse=a
 
-function s:setupWrapping()
-  set wrap
-  set wrapmargin=2
-  set textwidth=72
-endfunction
 au BufRead,BufNewFile *.jbuilder setf ruby
 if has("autocmd")
-  " Indent p tags
-  autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
-
   autocmd User fugitive
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
         \   nnoremap <buffer> .. :edit %:h<CR> |
         \ endif
-
-  " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
@@ -186,15 +167,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-let g:CommandTMaxHeight=15
-let g:CommandTMaxFiles=20000
 set ttimeoutlen=50
-
-if &term =~ "xterm" || &term =~ "screen"
-  let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
-  let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
-  let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
-endif
 
 "" Status- and Powerline
 if has("statusline") && !&cp
@@ -202,10 +175,8 @@ if has("statusline") && !&cp
   set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 endif
 
-""ZoomWin
-map <silent><leader>z :ZoomWin<CR>
-
 map <silent><leader>f :CtrlP<CR>
+map <silent><leader>b :CtrlPBuffer<CR>
 
 nmap tt <c-]>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -241,10 +212,12 @@ inoremap jj <c-c>
 inoremap <esc> <nop>
 inoremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 inoremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-inoremap <left>  :echoerr 'USE H TO GO LEFT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-inoremap <right> :echoerr 'USE L TO GO RIGHT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+inoremap <left>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+inoremap <right>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 noremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 noremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <left>  :echoerr 'USE H TO GO LEFT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <right> :echoerr 'USE L TO GO RIGHT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+" noremap h  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+" noremap l  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+noremap <left>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
+noremap <right>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 nmap <leader>gs :Gstatus<CR><C-w>20+
