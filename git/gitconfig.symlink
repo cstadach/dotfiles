@@ -41,15 +41,15 @@
         #   la = all commits, all reachable refs
         head = !git l -1
         h = !git head
-        hp = "!source ~/.githelpers && show_git_head"
+        hp = !source ~/.githelpers && show_git_head
         r = !git l -30
         ra = !git r --all
-        l = "!source ~/.githelpers && pretty_git_log"
+        l = !source ~/.githelpers && pretty_git_log
         la = !git l --all
         promote = !$ZSH/bin/git-promote
-        wtf     = !$ZSH/bin/git-wtf
+        wtf = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
-        count   = !git shortlog -sn
+        count = !git shortlog -sn
 	ctags = !.git/hooks/ctags
 [branch]
         autosetupmerge = true
@@ -75,3 +75,5 @@
 	default = simple
 [init]
 	templatedir = ~/.git_template
+[mergetool]
+	keepBackup = false
