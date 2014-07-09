@@ -71,6 +71,9 @@ set scrolloff=3 " have some context around the current line always on screen
 " BUFFER AND FILE SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" disable ctrlp feature of jumping to file already open in other window
+let g:ctrlp_switch_buffer = '0'
+
 " No backups and swapfiles needed when using versioning
 set nobackup
 set noswapfile
