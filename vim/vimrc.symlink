@@ -103,7 +103,6 @@ set listchars+=extends:»
 set listchars+=precedes:«
 set listchars+=trail:•
 
-let mapleader=","
 
 
 
