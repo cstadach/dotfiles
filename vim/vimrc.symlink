@@ -208,6 +208,7 @@ endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 inoremap jj <c-c>
+inoremap rld Rails.logger.debug
 inoremap <esc> <nop>
 inoremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 inoremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
