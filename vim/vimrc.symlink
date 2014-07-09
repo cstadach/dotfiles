@@ -214,10 +214,4 @@ inoremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 inoremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 inoremap <left>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 inoremap <right>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-" noremap h  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-" noremap l  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <left>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-noremap <right>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-nmap <leader>gs :Gstatus<CR><C-w>20+
+let g:ackprg = 'ag --nogroup --nocolor --column'
