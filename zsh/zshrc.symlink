@@ -38,4 +38,4 @@ do
 done
 
 unset config_files
-. /etc/profile.d/vte.sh
+# . /etc/profile.d/vte.sh
