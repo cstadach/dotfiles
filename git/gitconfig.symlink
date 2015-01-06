@@ -7,7 +7,7 @@
         name = Christian Stadach
         email = christian@stadach.com
 [credential]
-	helper = osxkeychain
+	helper = cache --timeout=3600
 [alias]
         st = status
         ci = commit
@@ -41,15 +41,15 @@
         #   la = all commits, all reachable refs
         head = !git l -1
         h = !git head
-        hp = "!source ~/.githelpers && show_git_head"
+        hp = !source ~/.githelpers && show_git_head
         r = !git l -30
         ra = !git r --all
-        l = "!source ~/.githelpers && pretty_git_log"
+        l = !source ~/.githelpers && pretty_git_log
         la = !git l --all
         promote = !$ZSH/bin/git-promote
-        wtf     = !$ZSH/bin/git-wtf
+        wtf = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
-        count   = !git shortlog -sn
+        count = !git shortlog -sn
 	ctags = !.git/hooks/ctags
 [branch]
         autosetupmerge = true
@@ -71,7 +71,6 @@
         # for more information on different options of the below setting.
         #
         # Setting to git 2.0 default to surpress warning message
-        default = simple
 [mergetool "meld"]
 	path = /usr/bin/meld
 [mergetool "diffmerge"]
@@ -92,6 +91,8 @@
 	tool = Kaleidoscope
 [init]
 	templatedir = ~/.git_template
+[mergetool]
+	keepBackup = false
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
