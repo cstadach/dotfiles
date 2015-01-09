@@ -16,7 +16,6 @@ Plugin 'gmarik/vundle'
 " My Bundles here:
 "
 " original repos on github
-" original repos on github
 Plugin 'scrooloose/syntastic.git'
 Plugin 'tpope/vim-unimpaired.git'
 Plugin 'tpope/vim-abolish.git'
@@ -33,7 +32,7 @@ Plugin 'ervandew/supertab.git'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'hail2u/vim-css3-syntax.git'
 Plugin 'vim-ruby/vim-ruby.git'
-Bundle 'altercation/vim-colors-solarized.git'
+Plugin 'sjl/badwolf'
 Plugin 'kien/ctrlp.vim.git'
 " vim-scripts repos
 
@@ -48,21 +47,8 @@ filetype plugin indent on       " load file type plugins + indentation
 
 syntax enable
 
-if has('gui-running')
-  set background=light
-else
-  set background=dark
-endif
-
-if has('mac')
-  :let g:solarized_termcolors=256
-  :colorscheme solarized
-elseif has('unix')
-  set t_Co=16
-  let g:solarized_termcolors=&t_Co
-  let g:solarized_termtrans=1
-  colorscheme solarized
-endif
+set background=dark
+color badwolf
 
 set showcmd      " display incomplete commands
 set number      " line numbers
