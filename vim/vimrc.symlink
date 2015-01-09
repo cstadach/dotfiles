@@ -158,6 +158,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 set ttimeoutlen=50
+let &colorcolumn=join(range(81,999),",") " Highlight line 80 and above
 
 "" Status- and Powerline
 if has("statusline") && !&cp
