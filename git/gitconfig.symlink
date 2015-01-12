@@ -77,3 +77,6 @@
 	templatedir = ~/.git_template
 [mergetool]
 	keepBackup = false
+	bc3 = trustExitCode
+[merge]
+	tool = bc3
