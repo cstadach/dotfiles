@@ -39,3 +39,5 @@ done
 
 unset config_files
 . /etc/profile.d/vte.sh
+
+export TERM=xterm-256color
