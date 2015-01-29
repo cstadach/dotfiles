@@ -27,6 +27,7 @@ Plugin 'tpope/vim-commentary.git'
 Plugin 'tpope/vim-endwise.git'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-rake.git'
+Plugin 'tpope/vim-rbenv.git'
 Plugin 'mileszs/ack.vim.git'
 Plugin 'ervandew/supertab.git'
 Plugin 'pangloss/vim-javascript.git'
@@ -91,7 +92,7 @@ set listchars+=extends:»
 set listchars+=precedes:«
 set listchars+=trail:•
 
-
+set diffopt+=vertical
 
 
 
