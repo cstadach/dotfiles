@@ -27,6 +27,7 @@ Plugin 'tpope/vim-commentary.git'
 Plugin 'tpope/vim-endwise.git'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-rake.git'
+Plugin 'thoughtbot/vim-rspec'
 Plugin 'mileszs/ack.vim.git'
 Plugin 'ervandew/supertab.git'
 Plugin 'pangloss/vim-javascript.git'
@@ -156,6 +157,14 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+"" RSpec.vim mappings
+map <C-S>t :call RunCurrentSpecFile()<CR>
+map <C-S>s :call RunNearestSpec()<CR>
+map <C-S>l :call RunLastSpec()<CR>
+map <C-S>a :call RunAllSpecs()<CR>
+
+let g:rspec_command = "!" . "clear" . "&& echo " . "bundle exec rspec {spec}" . "&& bundle exec rspec {spec}"
 
 set ttimeoutlen=50
 
