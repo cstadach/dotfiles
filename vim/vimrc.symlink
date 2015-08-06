@@ -170,7 +170,7 @@ set ttimeoutlen=50
 
 highlight Normal cterm=none ctermfg=229 ctermbg=232
 highlight ColorColumn ctermbg=233
-let &colorcolumn=join(range(81,999),",") " Highlight line 80 and above
+let &colorcolumn=join(range(81,82),",") " Highlight line 81
 
 "" Status- and Powerline
 if has("statusline") && !&cp
