@@ -165,7 +165,7 @@ map <C-S>s :call RunNearestSpec()<CR>
 map <C-S>l :call RunLastSpec()<CR>
 map <C-S>a :call RunAllSpecs()<CR>
 
-let g:rspec_command = "!" . "clear" . "&& echo " . "bundle exec rspec {spec}" . "&& bundle exec rspec {spec}"
+" let g:rspec_command = "!" . "clear" . "&& echo " . "bundle exec rspec {spec}" . "&& bundle exec rspec {spec}"
 
 set ttimeoutlen=50
 
