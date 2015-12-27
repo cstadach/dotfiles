@@ -28,6 +28,7 @@ Plugin 'tpope/vim-endwise.git'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-rake.git'
 Plugin 'tpope/vim-rbenv.git'
+Plugin 'thoughtbot/vim-rspec'
 Plugin 'mileszs/ack.vim.git'
 Plugin 'ervandew/supertab.git'
 Plugin 'pangloss/vim-javascript.git'
@@ -51,7 +52,7 @@ syntax enable
 set background=dark
 color badwolf
 
-set showcmd      " display incomplete commands
+set showcmd     " display incomplete commands
 set number      " line numbers
 set cursorline  " highlight the line of the cursor
 set scrolloff=3 " have some context around the current line always on screen
@@ -94,7 +95,11 @@ set listchars+=trail:•
 
 set diffopt+=vertical
 
-
+" RSpec.vim mappings
+map <C-S>t :call RunCurrentSpecFile()<CR>
+map <C-S>s :call RunNearestSpec()<CR>
+map <C-S>l :call RunLastSpec()<CR>
+map <C-S>a :call RunAllSpecs()<CR>
 
 "" HTML Indentation
 " This must be loaded manually since vim doesn't seem to
@@ -200,8 +205,4 @@ inoremap <s-tab> <c-n>
 inoremap jj <c-c>
 inoremap rld Rails.logger.debug
 inoremap <esc> <nop>
-inoremap <up>    :echoerr 'USE K TO GO UP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-inoremap <down>  :echoerr 'USE J TO GO DOWN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-inoremap <left>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
-inoremap <right>  :echoerr 'USE WORDWISE MOVEMENTS OR SEARCH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'<CR>
 let g:ackprg = 'ag --nogroup --nocolor --column'
