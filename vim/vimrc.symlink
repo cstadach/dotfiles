@@ -21,13 +21,12 @@ Plugin 'tpope/vim-unimpaired.git'
 Plugin 'tpope/vim-abolish.git'
 Plugin 'tpope/vim-repeat.git'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-bundler.git'
+" Plugin 'tpope/vim-bundler.git'
 Plugin 'tpope/vim-rails.git'
 Plugin 'tpope/vim-commentary.git'
 Plugin 'tpope/vim-endwise.git'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-rake.git'
-Plugin 'tpope/vim-rbenv.git'
 Plugin 'thoughtbot/vim-rspec'
 Plugin 'mileszs/ack.vim.git'
 Plugin 'ervandew/supertab.git'
@@ -62,7 +61,8 @@ set scrolloff=3 " have some context around the current line always on screen
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " disable ctrlp feature of jumping to file already open in other window
-let g:ctrlp_switch_buffer = '0'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_max_files = 0
 
 " No backups and swapfiles needed when using versioning
 set nobackup
@@ -76,7 +76,7 @@ set hidden
 set autoread
 
 " Clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 "" Whitespace and Files
 set nowrap                      " don't wrap lines
@@ -164,7 +164,10 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 set ttimeoutlen=50
-let &colorcolumn=join(range(81,999),",") " Highlight line 80 and above
+
+highlight Normal cterm=none ctermfg=229 ctermbg=232
+highlight ColorColumn ctermbg=233
+let &colorcolumn=join(range(81,82),",") " Highlight line 81
 
 "" Status- and Powerline
 if has("statusline") && !&cp
