@@ -51,10 +51,11 @@ syntax enable
 set background=dark
 color badwolf
 
-set showcmd      " display incomplete commands
-set relativenumber      " line numbers
-set cursorline  " highlight the line of the cursor
-set scrolloff=3 " have some context around the current line always on screen
+set showcmd          " display incomplete commands
+set relativenumber   "relative line numbers
+set number           " line numbers
+set cursorline       " highlight the line of the cursor
+set scrolloff=3      " have some context around the current line always on screen
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " BUFFER AND FILE SETTINGS
