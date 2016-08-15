@@ -35,6 +35,7 @@ Plugin 'ervandew/supertab.git'
 Plugin 'vim-ruby/vim-ruby.git'
 Plugin 'sjl/badwolf'
 Plugin 'kien/ctrlp.vim.git'
+Plugin 'vadv/vim-chef'
 " vim-scripts repos
 
 call vundle#end()
