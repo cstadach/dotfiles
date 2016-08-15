@@ -140,6 +140,8 @@ if has("autocmd")
         \   nnoremap <buffer> .. :edit %:h<CR> |
         \ endif
 
+  autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
+
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
 
