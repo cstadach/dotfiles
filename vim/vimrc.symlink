@@ -77,7 +77,7 @@ set hidden
 set autoread
 
 " Clipboard
-set clipboard=unnamedplus
+set clipboard=unnamed
 
 "" Whitespace and Files
 set nowrap                      " don't wrap lines
