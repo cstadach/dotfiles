@@ -11,6 +11,9 @@ case $( uname -s ) in
   Darwin)
     if $(gls &>/dev/null)
     then
+
+      alias uuid="uuidgen | tr -d '\n' | tr '[:upper:]' '[:lower:]'  | pbcopy && pbpaste && echo"
+
       alias ls="gls -F --color"
       alias l="gls -lAh --color"
       alias ll="gls -l --color"

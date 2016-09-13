@@ -140,7 +140,6 @@ if has("autocmd")
         \   nnoremap <buffer> .. :edit %:h<CR> |
         \ endif
 
-  autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
@@ -175,7 +174,7 @@ let &colorcolumn=join(range(81,82),",") " Highlight line 81
 "" Status- and Powerline
 if has("statusline") && !&cp
   set laststatus=2  " always show the status bar
-  set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)%{fugitive#statusline()}
+  set statusline=%<%F\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)%{fugitive#statusline()}
 endif
 
 nmap tt <c-]>
@@ -209,6 +208,5 @@ endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 inoremap jj <c-c>
-inoremap rld Rails.logger.debug
 inoremap <esc> <nop>
 let g:ackprg = 'ag --nogroup --nocolor --column'
