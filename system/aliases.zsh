@@ -9,15 +9,17 @@ case $( uname -s ) in
     alias la='ls -A --color'
     ;;
   Darwin)
+    alias uuid="uuidgen | tr -d '\n' | tr '[:upper:]' '[:lower:]'  | pbcopy && pbpaste && echo"
     if $(gls &>/dev/null)
     then
-
-      alias uuid="uuidgen | tr -d '\n' | tr '[:upper:]' '[:lower:]'  | pbcopy && pbpaste && echo"
-
       alias ls="gls -F --color"
       alias l="gls -lAh --color"
       alias ll="gls -l --color"
       alias la='gls -A --color'
+    fi
+    if $(gtar &>/dev/null)
+    then
+      alias tar="gtar"
     fi
     ;;
   esac
