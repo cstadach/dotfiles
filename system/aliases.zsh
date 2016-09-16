@@ -17,9 +17,6 @@ case $( uname -s ) in
       alias ll="gls -l --color"
       alias la='gls -A --color'
     fi
-    if $(gtar &>/dev/null)
-    then
-      alias tar="gtar"
-    fi
+    alias tar="gtar"
     ;;
   esac
