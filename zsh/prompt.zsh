@@ -68,7 +68,9 @@ set_prompt () {
   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
 
+export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}: ${PWD/#$HOME/~}\007"'
+
 precmd() {
-  title "zsh" "%m" "%55<...<%~"
+ eval "$PROMPT_COMMAND" 
   set_prompt
 }
