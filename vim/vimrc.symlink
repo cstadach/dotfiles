@@ -53,6 +53,7 @@ set background=dark
 color badwolf
 
 set showcmd     " display incomplete commands
+set relativenumber      " relativeline numbers
 set number      " line numbers
 set cursorline  " highlight the line of the cursor
 set scrolloff=3 " have some context around the current line always on screen
