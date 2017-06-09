@@ -137,8 +137,8 @@ else
   let g:syntastic_style_warning_symbol = '>'
 endif
 
-"" Mouse
-set mouse=a
+"" Mouse only in normal
+set mouse=n
 
 au BufRead,BufNewFile *.jbuilder setf ruby
 if has("autocmd")
