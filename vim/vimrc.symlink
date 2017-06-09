@@ -227,5 +227,8 @@ command! FormatJSON call FormatJSON()
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 inoremap jj <c-c>
-inoremap <esc> <nop>
+inoremap  <up>     <nop>
+inoremap  <down>   <nop>
+inoremap  <left>   <nop>
+inoremap  <right>  <nop>
 let g:ackprg = 'ag --nogroup --nocolor --column'
