@@ -38,6 +38,7 @@ Plugin 'vim-ruby/vim-ruby.git'
 Plugin 'sjl/badwolf'
 Plugin 'kien/ctrlp.vim.git'
 Plugin 'vadv/vim-chef'
+Plugin 'JamshedVesuna/vim-markdown-preview'
 " vim-scripts repos
 
 call vundle#end()
@@ -63,6 +64,9 @@ set scrolloff=3 " have some context around the current line always on screen
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " BUFFER AND FILE SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" remap markdown preview hotkey
+let vim_markdown_preview_hotkey='<C-m>'
 
 " disable ctrlp feature of jumping to file already open in other window
 let g:ctrlp_switch_buffer = 0
