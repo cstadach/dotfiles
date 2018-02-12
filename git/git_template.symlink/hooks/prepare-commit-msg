@@ -1,0 +1,9 @@
+#!/bin/sh
+
+ticket=$(git symbolic-ref HEAD | perl -pe '/(EMQ-\d+|XDN-\d+)/;$_=$1')
+
+if [ -n "${ticket}" ]; then
+    if head -n1 "$1" | grep -v -q "${ticket}"; then
+        echo "${ticket}: $(cat "$1")" > "$1"
+    fi
+fi
