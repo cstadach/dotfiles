@@ -16,35 +16,90 @@ Plugin 'VundleVim/Vundle.vim'
 " My Bundles here:
 "
 " original repos on github
-" Plugin 'scrooloose/syntastic.git'
+Plugin 'majutsushi/tagbar.git'
+Plugin 'tpope/vim-dispatch.git'
 Plugin 'tpope/vim-unimpaired.git'
 Plugin 'tpope/vim-abolish.git'
 Plugin 'tpope/vim-repeat.git'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-bundler.git'
-Plugin 'tpope/vim-rails.git'
+" Plugin 'tpope/vim-rails.git'
 Plugin 'tpope/vim-commentary.git'
 Plugin 'tpope/vim-endwise.git'
 Plugin 'tpope/vim-surround.git'
 Plugin 'tpope/vim-rake.git'
-Plugin 'thoughtbot/vim-rspec'
 Plugin 'mileszs/ack.vim.git'
 Plugin 'ervandew/supertab.git'
 Plugin 'leafgarland/typescript-vim.git'
-Plugin 'isRuslan/vim-es6'
-" Plugin 'pangloss/vim-javascript.git'
-" Plugin 'hail2u/vim-css3-syntax.git'
+Plugin 'pangloss/vim-javascript.git'
+Plugin 'cespare/vim-toml'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'janko-m/vim-test'
 Plugin 'vim-ruby/vim-ruby.git'
-Plugin 'sjl/badwolf'
+Plugin 'keith/rspec.vim'
+Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'kien/ctrlp.vim.git'
-Plugin 'vadv/vim-chef'
+Plugin 'Quramy/tsuquyomi'
 Plugin 'JamshedVesuna/vim-markdown-preview'
+Plugin 'shepherdwind/vim-velocity'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'fatih/vim-go.git'
+Plugin 'udalov/kotlin-vim.git'
+Plugin 'AndrewRadev/splitjoin.vim'
 " vim-scripts repos
 
 call vundle#end()
 
 filetype plugin indent on       " load file type plugins + indentation
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TEST SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let test#javascript#karma#file_pattern = '.spec\.ts'
+let test#javascript#karma#executable = 'npm run test:nonverbose'
+nmap <silent> <C-S>s :TestSuite<CR>
+nmap <silent> <C-S>t :TestNearest<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ANGULAR SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:angular_source_directory = 'src/app'
+let g:angular_test_directory = 'test/app'
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TYPESCRIPT SETTINGS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:typescript_compiler_binary = 'tsc'
+let g:typescript_compiler_options = ''
+autocmd QuickFixCmdPost [^l]* nested cwindow
+autocmd QuickFixCmdPost    l* nested lwindow
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"        Jenkins Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+au BufReadPost Jenkinsfile set syntax=groovy
+au BufReadPost Jenkinsfile set filetype=groovy
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"        Go Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:go_fmt_command = "goimports"
+let g:go_metalinter_autosave = 0
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_auto_sameids = 1
+autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " DISPLAY SETTINGS
@@ -53,10 +108,9 @@ filetype plugin indent on       " load file type plugins + indentation
 syntax enable
 
 set background=dark
-color badwolf
+colorscheme PaperColor
 
 set showcmd     " display incomplete commands
-set relativenumber      " relativeline numbers
 set number      " line numbers
 set cursorline  " highlight the line of the cursor
 set scrolloff=3 " have some context around the current line always on screen
@@ -71,10 +125,16 @@ let vim_markdown_preview_hotkey='<C-m>'
 " disable ctrlp feature of jumping to file already open in other window
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_max_files = 0
+" Ignore some folders and files for CtrlP indexing
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ }
 
 " No backups and swapfiles needed when using versioning
 set nobackup
 set noswapfile
+set autowrite
 
 " Allow backgrounding buffers without writing them, and remember marks/undo
 " for backgrounded buffers
@@ -103,12 +163,6 @@ set listchars+=trail:•
 
 set diffopt+=vertical
 
-" RSpec.vim mappings
-map <C-S>t :call RunCurrentSpecFile()<CR>
-map <C-S>s :call RunNearestSpec()<CR>
-map <C-S>l :call RunLastSpec()<CR>
-map <C-S>a :call RunAllSpecs()<CR>
-
 "" HTML Indentation
 " This must be loaded manually since vim doesn't seem to
 " autoload the file. Need to investigate that...
@@ -116,10 +170,11 @@ source ~/.vim/indent/html.vim
 hi def link jsObjectKey Label
 "" Cursorline
 hi CursorLine cterm=NONE term=NONE
+let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
+let g:syntastic_typescript_checkers = ['tslint'] 
 let g:syntastic_check_on_open = 1
 let g:syntastic_enable_signs = 1    " Put errors on left side
 " let g:syntastic_quiet_warnings = 1  " Only errors, not warnings please
-let g:syntastic_quiet_messages = { "level": "errors" }  " Only errors, not warnings please
 let g:syntastic_auto_loc_list = 2   " Only show errors when I ask
 let g:syntastic_disabled_filetypes = ['html', 'js']
 let g:syntastic_cpp_check_header = 1
@@ -146,10 +201,6 @@ if has("autocmd")
         \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
         \   nnoremap <buffer> .. :edit %:h<CR> |
         \ endif
-
-
-  " Treat JSON files like JavaScript
-  au BufNewFile,BufRead *.json set ft=javascript
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
@@ -224,6 +275,11 @@ endfunction
 
 command! FormatJSON call FormatJSON()
 
+nnoremap ∆ :m .+1<CR>==
+nnoremap ˚ :m .-2<CR>==
+vnoremap ∆ :m '>+1<CR>gv=gv
+vnoremap ˚ :m '<-2<CR>gv=gv
+
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
 inoremap jj <c-c>
@@ -232,3 +288,31 @@ inoremap  <down>   <nop>
 inoremap  <left>   <nop>
 inoremap  <right>  <nop>
 let g:ackprg = 'ag --nogroup --nocolor --column'
+
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
