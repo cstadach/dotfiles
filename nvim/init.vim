@@ -8,26 +8,37 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'rakr/vim-one'
-Plug 'blueshirts/darcula'
 Plug 'rafi/awesome-vim-colorschemes'
+Plug 'SirVer/ultisnips'
 
 Plug 'fatih/vim-go'
-Plug 'Shougo/deoplete.nvim'
-Plug 'zchee/deoplete-go', { 'do': 'make'}
+Plug 'vim-ruby/vim-ruby'
+Plug 'python-mode/python-mode'
 
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-surround'
+Plug 'udalov/kotlin-vim'
+
+Plug 'ervandew/supertab'
 
 " searcher
 Plug 'mileszs/ack.vim'
 
 " linter
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
+Plug 'neomake/neomake'
 
+" Configure signs.
+let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
+let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
+let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
+let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
+let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
 " statusline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -38,10 +49,49 @@ Plug 'kien/ctrlp.vim'
 call plug#end()
 
 " Error and warning signs.
-let g:ale_sign_error = '⤫'
-let g:ale_sign_warning = '⚠'
+" let g:ale_sign_error = '⤫'
+" let g:ale_sign_warning = '⚠'
 " Enable integration with airline.
-let g:airline#extensions#ale#enabled = 1
+" let g:airline#extensions#ale#enabled = 1
+
+" gometalinter configuration
+let g:go_metalinter_command = ""
+let g:go_metalinter_deadline = "5s"
+let g:go_metalinter_enabled = [
+    \ 'deadcode',
+    \ 'gocyclo',
+    \ 'golint',
+    \ 'gosimple',
+    \ 'vet',
+    \ 'vetshadow'
+\]
+
+" neomake configuration for Go.
+" When reading a buffer (after 1s), and when writing.
+call neomake#configure#automake('rw', 1000)
+
+let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
+let g:neomake_go_gometalinter_maker = {
+  \ 'args': [
+  \   '--tests',
+  \   '--config=/Users/c.stadach/.gometalinter',
+  \   '--enable-gc',
+  \   '--concurrency=3',
+  \   '--fast',
+  \   '-D', 'aligncheck',
+  \   '-D', 'dupl',
+  \   '-D', 'gocyclo',
+  \   '-D', 'gotype',
+  \   '-E', 'unused',
+  \   '%:p:h',
+  \ ],
+  \ 'append_file': 0,
+  \ 'errorformat':
+  \   '%E%f:%l:%c:%trror: %m,' .
+  \   '%W%f:%l:%c:%tarning: %m,' .
+  \   '%E%f:%l::%trror: %m,' .
+  \   '%W%f:%l::%tarning: %m'
+  \ }
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 
@@ -51,20 +101,15 @@ let g:airline_theme='atomic'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "        Go Settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Enable deoplete on startup
-let g:deoplete#enable_at_startup = 1
 set completeopt+=noinsert
 set completeopt+=noselect
 set completeopt-=preview " disable preview window at the bottom of the screen
-inoremap <silent><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
-" Disable deoplete when in multi cursor mode
-function! Multiple_cursors_before()
-  let b:deoplete_disable_auto_complete = 1
-endfunction
-function! Multiple_cursors_after()
-  let b:deoplete_disable_auto_complete = 0
-endfunction
+let g:UltiSnipsSnippetsDir    = '~/.config/nvim/UltiSnips/'
+let g:UltiSnipsExpandTrigger="<C-j>"
+let g:ulti_expand_or_jump_res = 0
+
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 let g:go_fmt_command = "goimports"
 let g:go_metalinter_autosave = 0
@@ -87,7 +132,7 @@ autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit'
 
 syntax enable
 
-colorscheme darcula
+colorscheme papercolor
 set background=dark
 
 set showcmd     " display incomplete commands
@@ -161,8 +206,6 @@ nnoremap <C-H> <C-W><C-H>
 
 set ttimeoutlen=50
 
-highlight Normal cterm=none ctermfg=229 ctermbg=232
-highlight ColorColumn ctermbg=233
 let &colorcolumn=join(range(81,82),",") " Highlight line 81
 
 "" Status- and Powerline
@@ -201,3 +244,17 @@ command! FormatJSON call FormatJSON()
 
 inoremap <s-tab> <c-n>
 inoremap jj <c-c>
+
+hi SignColumn ctermbg=255
+
+let g:PaperColor_Theme_Options = {
+  \   'theme': {
+  \     'default.dark': {
+  \       'override' : {
+  \         'error_bg' : ['#ffffff', '255'],
+  \         'error_fg' : ['#ffffff', '255']
+  \       }
+  \     }
+  \   }
+  \ }
+
