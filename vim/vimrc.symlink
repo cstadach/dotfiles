@@ -6,49 +6,48 @@ runtime macros/matchit.vim
 
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle
-" required!
-Plugin 'VundleVim/Vundle.vim'
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 
 " My Bundles here:
 "
 " original repos on github
-Plugin 'majutsushi/tagbar.git'
-Plugin 'tpope/vim-dispatch.git'
-Plugin 'tpope/vim-unimpaired.git'
-Plugin 'tpope/vim-abolish.git'
-Plugin 'tpope/vim-repeat.git'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-bundler.git'
-" Plugin 'tpope/vim-rails.git'
-Plugin 'tpope/vim-commentary.git'
-Plugin 'tpope/vim-endwise.git'
-Plugin 'tpope/vim-surround.git'
-Plugin 'tpope/vim-rake.git'
-Plugin 'mileszs/ack.vim.git'
-Plugin 'ervandew/supertab.git'
-Plugin 'leafgarland/typescript-vim.git'
-Plugin 'pangloss/vim-javascript.git'
-Plugin 'cespare/vim-toml'
-Plugin 'scrooloose/syntastic.git'
-Plugin 'janko-m/vim-test'
-Plugin 'vim-ruby/vim-ruby.git'
-Plugin 'keith/rspec.vim'
-Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'kien/ctrlp.vim.git'
-Plugin 'Quramy/tsuquyomi'
-Plugin 'JamshedVesuna/vim-markdown-preview'
-Plugin 'shepherdwind/vim-velocity'
-Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'fatih/vim-go.git'
-Plugin 'udalov/kotlin-vim.git'
-Plugin 'AndrewRadev/splitjoin.vim'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-bundler'
+" Plug 'tpope/vim-rails'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-rake'
+Plug 'mileszs/ack.vim'
+Plug 'ervandew/supertab'
+Plug 'leafgarland/typescript-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'cespare/vim-toml'
+Plug 'scrooloose/syntastic'
+Plug 'janko-m/vim-test'
+Plug 'vim-ruby/vim-ruby'
+Plug 'keith/rspec.vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'kien/ctrlp.vim'
+Plug 'Quramy/tsuquyomi'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'shepherdwind/vim-velocity'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'fatih/vim-go'
+Plug 'udalov/kotlin-vim'
+Plug 'AndrewRadev/splitjoin.vim'
 " vim-scripts repos
 
-call vundle#end()
+" Initialize plugin system
+call plug#end()
 
 filetype plugin indent on       " load file type plugins + indentation
 

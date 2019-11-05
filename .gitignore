@@ -4,4 +4,5 @@ vim/vim.symlink/.netrwhist
 vim/vim.symlink/bundle/
 vim/vim.symlink/_temp
 vim/vim.symlink/_backup
+vim/vim.symlink/plugged
 .ruby-version
