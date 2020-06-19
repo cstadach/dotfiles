@@ -35,5 +35,3 @@ done
 
 unset config_files
 # . /etc/profile.d/vte.sh
-
-eval "$(rbenv init -)"
