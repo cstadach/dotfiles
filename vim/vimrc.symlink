@@ -6,54 +6,14 @@ runtime macros/matchit.vim
 
 filetype off                   " required!
 
-<<<<<<< HEAD
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
-" My Bundles here:
-"
-=======
-call plug#begin('~/.vim/plugged')
-
->>>>>>> moving from vundle to plug plus less plugins
 " original repos on github
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
-<<<<<<< HEAD
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-bundler'
-" Plug 'tpope/vim-rails'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-rake'
-Plug 'mileszs/ack.vim'
-Plug 'ervandew/supertab'
-Plug 'leafgarland/typescript-vim'
-Plug 'pangloss/vim-javascript'
-Plug 'cespare/vim-toml'
-Plug 'scrooloose/syntastic'
-Plug 'janko-m/vim-test'
-Plug 'vim-ruby/vim-ruby'
-Plug 'keith/rspec.vim'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'kien/ctrlp.vim'
-Plug 'Quramy/tsuquyomi'
-Plug 'JamshedVesuna/vim-markdown-preview'
-Plug 'shepherdwind/vim-velocity'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'fatih/vim-go'
-Plug 'udalov/kotlin-vim'
-Plug 'AndrewRadev/splitjoin.vim'
-" vim-scripts repos
-
-" Initialize plugin system
-=======
 Plug 'mechatroner/rainbow_csv'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
@@ -71,7 +31,6 @@ Plug 'rafi/awesome-vim-colorschemes'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " vim-scripts repos
 
->>>>>>> moving from vundle to plug plus less plugins
 call plug#end()
 
 filetype plugin indent on       " load file type plugins + indentation
