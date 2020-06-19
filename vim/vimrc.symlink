@@ -6,6 +6,7 @@ runtime macros/matchit.vim
 
 filetype off                   " required!
 
+<<<<<<< HEAD
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
@@ -13,12 +14,17 @@ call plug#begin('~/.vim/plugged')
 
 " My Bundles here:
 "
+=======
+call plug#begin('~/.vim/plugged')
+
+>>>>>>> moving from vundle to plug plus less plugins
 " original repos on github
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
+<<<<<<< HEAD
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-bundler'
 " Plug 'tpope/vim-rails'
@@ -47,35 +53,28 @@ Plug 'AndrewRadev/splitjoin.vim'
 " vim-scripts repos
 
 " Initialize plugin system
+=======
+Plug 'mechatroner/rainbow_csv'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-surround'
+Plug 'mileszs/ack.vim'
+Plug 'ervandew/supertab'
+Plug 'cespare/vim-toml'
+Plug 'kien/ctrlp.vim'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'shepherdwind/vim-velocity'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'rafi/awesome-vim-colorschemes'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" vim-scripts repos
+
+>>>>>>> moving from vundle to plug plus less plugins
 call plug#end()
 
 filetype plugin indent on       " load file type plugins + indentation
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TEST SETTINGS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let test#javascript#karma#file_pattern = '.spec\.ts'
-let test#javascript#karma#executable = 'npm run test:nonverbose'
-nmap <silent> <C-S>s :TestSuite<CR>
-nmap <silent> <C-S>t :TestNearest<CR>
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ANGULAR SETTINGS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:angular_source_directory = 'src/app'
-let g:angular_test_directory = 'test/app'
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TYPESCRIPT SETTINGS
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:typescript_compiler_binary = 'tsc'
-let g:typescript_compiler_options = ''
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost    l* nested lwindow
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "        Jenkins Settings
@@ -84,34 +83,17 @@ au BufReadPost Jenkinsfile set syntax=groovy
 au BufReadPost Jenkinsfile set filetype=groovy
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"        Go Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let g:go_fmt_command = "goimports"
-let g:go_metalinter_autosave = 0
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_types = 1
-let g:go_auto_sameids = 1
-autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " DISPLAY SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 syntax enable
 
+colorscheme atom
 set background=dark
-colorscheme PaperColor
 
 set showcmd     " display incomplete commands
 set number      " line numbers
-set cursorline  " highlight the line of the cursor
+"set cursorline  " highlight the line of the cursor
 set scrolloff=3 " have some context around the current line always on screen
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -146,12 +128,6 @@ set autoread
 set clipboard=unnamed
 
 "" Whitespace and Files
-set nowrap                      " don't wrap lines
-set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
-set expandtab                   " use spaces, not tabs (optional)
-set backspace=indent,eol,start  " backspace through everything in insert mode
-set autoindent
-
 set list
 set listchars=""                  " Reset the listchars
 set listchars=nbsp:¬
@@ -159,6 +135,12 @@ set listchars+=tab:>-
 set listchars+=extends:»
 set listchars+=precedes:«
 set listchars+=trail:•
+
+set nowrap                      " don't wrap lines
+set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
+" set expandtab                   " use spaces, not tabs (optional)
+set backspace=indent,eol,start  " backspace through everything in insert mode
+set autoindent
 
 set diffopt+=vertical
 
@@ -169,27 +151,6 @@ source ~/.vim/indent/html.vim
 hi def link jsObjectKey Label
 "" Cursorline
 hi CursorLine cterm=NONE term=NONE
-let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
-let g:syntastic_typescript_checkers = ['tslint'] 
-let g:syntastic_check_on_open = 1
-let g:syntastic_enable_signs = 1    " Put errors on left side
-" let g:syntastic_quiet_warnings = 1  " Only errors, not warnings please
-let g:syntastic_auto_loc_list = 2   " Only show errors when I ask
-let g:syntastic_disabled_filetypes = ['html', 'js']
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_no_include_search = 1
-let g:syntastic_ruby_exec = '~/.rbenv/shims/ruby' " take the current ruby version specified by rbenv
-if has('unix')
-  let g:syntastic_error_symbol = '★'
-  let g:syntastic_style_error_symbol = '>'
-  let g:syntastic_warning_symbol = '⚠'
-  let g:syntastic_style_warning_symbol = '>'
-else
-  let g:syntastic_error_symbol = '!'
-  let g:syntastic_style_error_symbol = '>'
-  let g:syntastic_warning_symbol = '.'
-  let g:syntastic_style_warning_symbol = '>'
-endif
 
 "" Mouse only in normal
 set mouse=n
@@ -224,8 +185,6 @@ nnoremap <C-H> <C-W><C-H>
 
 set ttimeoutlen=50
 
-highlight Normal cterm=none ctermfg=229 ctermbg=232
-highlight ColorColumn ctermbg=233
 let &colorcolumn=join(range(81,82),",") " Highlight line 81
 
 "" Status- and Powerline
