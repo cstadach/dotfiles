@@ -401,31 +401,6 @@ if s:is_win
 
   " Copied from fzf
   function! s:wrap_cmds(cmds)
-<<<<<<< HEAD
-    return map([
-      \ '@echo off',
-      \ 'setlocal enabledelayedexpansion',
-      \ 'for /f "tokens=*" %%a in (''chcp'') do for %%b in (%%a) do set origchcp=%%b',
-      \ 'chcp 65001 > nul'
-    \ ]
-    \ + (type(a:cmds) == type([]) ? a:cmds : [a:cmds])
-    \ + ['chcp !origchcp! > nul', 'endlocal'],
-    \ 'v:val."\r"')
-  endfunction
-
-  function! s:batchfile(cmd)
-    let batchfile = tempname().'.bat'
-    call writefile(s:wrap_cmds(a:cmd), batchfile)
-    let cmd = plug#shellescape(batchfile, {'shell': &shell, 'script': 1})
-    if &shell =~# 'powershell\.exe$'
-      let cmd = '& ' . cmd
-    endif
-    return [batchfile, cmd]
-  endfunction
-else
-  function! s:rtp(spec)
-    return s:dirpath(a:spec.dir . get(a:spec, 'rtp', ''))
-=======
     let cmds = [
       \ '@echo off',
       \ 'setlocal enabledelayedexpansion']
@@ -438,7 +413,6 @@ else
       return map(cmds, printf('iconv(v:val."\r", "%s", "cp%d")', &encoding, s:codepage))
     endif
     return map(cmds, 'v:val."\r"')
->>>>>>> moving from vundle to plug plus less plugins
   endfunction
 
   function! s:batchfile(cmd)
@@ -912,10 +886,6 @@ endfunction
 
 function! s:chsh(swap)
   let prev = [&shell, &shellcmdflag, &shellredir]
-<<<<<<< HEAD
-  if !s:is_win && a:swap
-    set shell=sh shellredir=>%s\ 2>&1
-=======
   if !s:is_win
     set shell=sh
   endif
@@ -925,7 +895,6 @@ function! s:chsh(swap)
     elseif &shell =~# 'sh' || &shell =~# 'cmd\.exe'
       set shellredir=>%s\ 2>&1
     endif
->>>>>>> moving from vundle to plug plus less plugins
   endif
   return prev
 endfunction
@@ -1284,11 +1253,7 @@ function! s:job_abort()
       silent! call job_stop(j.jobid)
     endif
     if j.new
-<<<<<<< HEAD
-      call s:system('rm -rf ' . plug#shellescape(g:plugs[name].dir))
-=======
       call s:rm_rf(g:plugs[name].dir)
->>>>>>> moving from vundle to plug plus less plugins
     endif
   endfor
   let s:jobs = {}
@@ -1343,11 +1308,6 @@ function! s:spawn(name, cmd, opts)
   let job = { 'name': a:name, 'running': 1, 'error': 0, 'lines': [''],
             \ 'new': get(a:opts, 'new', 0) }
   let s:jobs[a:name] = job
-<<<<<<< HEAD
-  let cmd = has_key(a:opts, 'dir') ? s:with_cd(a:cmd, a:opts.dir, 0) : a:cmd
-  let argv = s:is_win ? ['cmd', '/s', '/c', '"'.cmd.'"'] : ['sh', '-c', cmd]
-=======
->>>>>>> moving from vundle to plug plus less plugins
 
   if s:nvim
     if has_key(a:opts, 'dir')
@@ -1501,14 +1461,6 @@ while 1 " Without TCO, Vim stack is bound to explode
       let s:jobs[name] = { 'running': 0, 'lines': s:lines(error), 'error': 1 }
     endif
   else
-<<<<<<< HEAD
-    call s:spawn(name,
-          \ printf('git clone %s %s %s %s 2>&1',
-          \ has_tag ? '' : s:clone_opt,
-          \ prog,
-          \ plug#shellescape(spec.uri, {'script': 0}),
-          \ plug#shellescape(s:trim(spec.dir), {'script': 0})), { 'new': 1 })
-=======
     let cmd = ['git', 'clone']
     if !has_tag
       call extend(cmd, s:clone_opt)
@@ -1517,7 +1469,6 @@ while 1 " Without TCO, Vim stack is bound to explode
       call add(cmd, prog)
     endif
     call s:spawn(name, extend(cmd, [spec.uri, s:trim(spec.dir)]), { 'new': 1 })
->>>>>>> moving from vundle to plug plus less plugins
   endif
 
   if !s:jobs[name].running
@@ -2153,15 +2104,6 @@ function! s:shellesc_ps1(arg)
   return "'".substitute(escape(a:arg, '\"'), "'", "''", 'g')."'"
 endfunction
 
-<<<<<<< HEAD
-function! plug#shellescape(arg, ...)
-  let opts = a:0 > 0 && type(a:1) == s:TYPE.dict ? a:1 : {}
-  let shell = get(opts, 'shell', s:is_win ? 'cmd.exe' : 'sh')
-  let script = get(opts, 'script', 1)
-  if shell =~# 'cmd\.exe$'
-    return s:shellesc_cmd(a:arg, script)
-  elseif shell =~# 'powershell\.exe$' || shell =~# 'pwsh$'
-=======
 function! s:shellesc_sh(arg)
   return "'".substitute(a:arg, "'", "'\\\\''", 'g')."'"
 endfunction
@@ -2189,7 +2131,6 @@ function! plug#shellescape(arg, ...)
   if shell =~# 'cmd\.exe'
     return s:shellesc_cmd(a:arg, script)
   elseif shell =~# 'powershell\.exe' || shell =~# 'pwsh$'
->>>>>>> moving from vundle to plug plus less plugins
     return s:shellesc_ps1(a:arg)
   endif
   return s:shellesc_sh(a:arg)
@@ -2233,10 +2174,6 @@ function! s:system(cmd, ...)
   let batchfile = ''
   try
     let [sh, shellcmdflag, shrd] = s:chsh(1)
-<<<<<<< HEAD
-    let cmd = a:0 > 0 ? s:with_cd(a:cmd, a:1) : a:cmd
-    if s:is_win
-=======
     if type(a:cmd) == s:TYPE.list
       " Neovim's system() supports list argument to bypass the shell
       " but it cannot set the working directory for the command.
@@ -2255,7 +2192,6 @@ function! s:system(cmd, ...)
       let cmd = s:with_cd(cmd, a:1, type(a:cmd) != s:TYPE.list)
     endif
     if s:is_win && type(a:cmd) != s:TYPE.list
->>>>>>> moving from vundle to plug plus less plugins
       let [batchfile, cmd] = s:batchfile(cmd)
     endif
     return system(cmd)
@@ -2335,13 +2271,9 @@ endfunction
 
 function! s:rm_rf(dir)
   if isdirectory(a:dir)
-<<<<<<< HEAD
-    call s:system((s:is_win ? 'rmdir /S /Q ' : 'rm -rf ') . plug#shellescape(a:dir))
-=======
     call s:system(s:is_win
     \ ? 'rmdir /S /Q '.plug#shellescape(a:dir)
     \ : ['rm', '-rf', a:dir])
->>>>>>> moving from vundle to plug plus less plugins
   endif
 endfunction
 
@@ -2450,11 +2382,7 @@ function! s:upgrade()
   let new = tmp . '/plug.vim'
 
   try
-<<<<<<< HEAD
-    let out = s:system(printf('git clone --depth 1 %s %s', plug#shellescape(s:plug_src), plug#shellescape(tmp)))
-=======
     let out = s:system(['git', 'clone', '--depth', '1', s:plug_src, tmp])
->>>>>>> moving from vundle to plug plus less plugins
     if v:shell_error
       return s:err('Error upgrading vim-plug: '. out)
     endif
@@ -2649,11 +2577,6 @@ function! s:diff()
     call s:append_ul(2, origin ? 'Pending updates:' : 'Last update:')
     for [k, v] in plugs
       let range = origin ? '..origin/'.v.branch : 'HEAD@{1}..'
-<<<<<<< HEAD
-      let cmd = 'git log --graph --color=never '.join(map(['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range], 'plug#shellescape(v:val)'))
-      if has_key(v, 'rtp')
-        let cmd .= ' -- '.plug#shellescape(v.rtp)
-=======
       let cmd = ['git', 'log', '--graph', '--color=never']
       if s:git_version_requirement(2, 10, 0)
         call add(cmd, '--no-show-signature')
@@ -2661,7 +2584,6 @@ function! s:diff()
       call extend(cmd, ['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range])
       if has_key(v, 'rtp')
         call extend(cmd, ['--', v.rtp])
->>>>>>> moving from vundle to plug plus less plugins
       endif
       let diff = s:system_chomp(cmd, v.dir)
       if !empty(diff)
