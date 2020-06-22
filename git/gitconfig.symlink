@@ -63,7 +63,8 @@
   interactive = auto
 [core]
   excludesfile = /home/cstadach/.gitignore_global
-  editor = nvim
+  editor = vim
+	filemode = false
 [apply]
   whitespace = nowarn
 [help]
