@@ -1,4 +1,2 @@
-export GOPATH=$HOME/code/go/
-export GOROOT=/usr/lib/go-1.13
-export PATH=$PATH:$GOPATH/bin
+export GOROOT=/usr/local/go
 export PATH=$PATH:$GOROOT/bin

@@ -1,2 +1,0 @@
-#compdef cgo
-_files -W $GOPROJECTS -/
