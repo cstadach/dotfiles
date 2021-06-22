@@ -10,6 +10,7 @@ call plug#begin('~/.vim/plugged')
 
 " original repos on github
 Plug 'majutsushi/tagbar'
+Plug 'hashivim/vim-terraform'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-abolish'
