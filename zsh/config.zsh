@@ -40,6 +40,8 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[^N' newtab
 bindkey '^?' backward-delete-char
+# Enable vi mode
+bindkey -v
 
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US
