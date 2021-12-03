@@ -48,7 +48,7 @@ au BufReadPost Jenkinsfile set filetype=groovy
 
 syntax enable
 
-colorscheme atom
+colorscheme PaperColor
 set background=dark
 
 set showcmd     " display incomplete commands
