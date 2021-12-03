@@ -7,7 +7,7 @@ load-tfswitch() {
   elif [ -f "$version_tf_path" ]; then
     tfswitch
   else
-    tfswitch --latest >/dev/null 2&>1
+    tfswitch --latest >/dev/null 2>&1
   fi
 
 }
