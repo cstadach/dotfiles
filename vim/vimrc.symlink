@@ -85,7 +85,11 @@ set hidden
 set autoread
 
 " Clipboard
-set clipboard=unnamedplus
+if has("macunix")
+    set clipboard=unnamed
+elseif has("unix")
+    set clipboard=unnamedplus
+endif
 
 "" Whitespace and Files
 set list
