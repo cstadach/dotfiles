@@ -63,7 +63,7 @@
   ui = true
   interactive = auto
 [core]
-  excludesfile = /home/cstadach/.gitignore_global
+  excludesfile = ~/.gitignore_global
   editor = vim
 	filemode = false
 [apply]
