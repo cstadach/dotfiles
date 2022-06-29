@@ -84,10 +84,11 @@
 	sslCAinfo = /etc/ssl/certs/ca-certificates.crt
 	sslverify = false
 [merge]
-	tool = meld
-[mergetool "meld"]
-  # Choose one of these 2 lines (not both!) explained below.
-  cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
-  #cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+	tool = vimdiff
+	conflictstyle = diff3
+#[mergetool "meld"]
+#  # Choose one of these 2 lines (not both!) explained below.
+#  cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+#  #cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
 [mergetool]
 	prompt = false
