@@ -1,7 +1,6 @@
 # ORDER
 SPACESHIP_PROMPT_ORDER=(
   time     #
-  vi_mode  # these sections will be
   user     # before prompt char
   host     #
   char
