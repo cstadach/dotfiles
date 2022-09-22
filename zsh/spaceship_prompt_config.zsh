@@ -1,13 +1,13 @@
 # ORDER
 SPACESHIP_PROMPT_ORDER=(
   time     #
-  user     # before prompt char
-  host     #
   char
   dir
   git
 )
-
+# Display time
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_TIME_FORMAT='%D{%H:%M}'
 # USER
 SPACESHIP_USER_PREFIX="" # remove `with` before username
 SPACESHIP_USER_SUFFIX="" # remove space before host
@@ -24,15 +24,16 @@ SPACESHIP_DIR_TRUNC='1' # show only last directory
 
 # GIT
 # Disable git symbol
-SPACESHIP_GIT_SYMBOL="" # disable git prefix
-SPACESHIP_GIT_BRANCH_PREFIX="" # disable branch prefix too
+#SPACESHIP_GIT_SYMBOL="" # disable git prefix
+SPACESHIP_GIT_ASYNC=false
+#SPACESHIP_GIT_BRANCH_PREFIX="" # disable branch prefix too
 # Wrap git in `git:(...)`
-SPACESHIP_GIT_PREFIX='git:('
-SPACESHIP_GIT_SUFFIX=") "
-SPACESHIP_GIT_BRANCH_SUFFIX="" # remove space after branch name
+#SPACESHIP_GIT_PREFIX='git:('
+#SPACESHIP_GIT_SUFFIX=") "
+#SPACESHIP_GIT_BRANCH_SUFFIX="" # remove space after branch name
 # Unwrap git status from `[...]`
-SPACESHIP_GIT_STATUS_PREFIX=""
-SPACESHIP_GIT_STATUS_SUFFIX=""
+#SPACESHIP_GIT_STATUS_PREFIX=""
+#SPACESHIP_GIT_STATUS_SUFFIX=""
 
 SPACESHIP_CONDA_SHOW=false
 
