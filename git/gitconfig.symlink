@@ -46,6 +46,7 @@
   ra = !git r --all
   l = !source ~/.githelpers && pretty_git_log
   la = !git l --all
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   promote = !$ZSH/bin/git-promote
   wtf = !$ZSH/bin/git-wtf
   rank-contributers = !$ZSH/bin/git-rank-contributers
