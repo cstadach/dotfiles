@@ -67,6 +67,7 @@
   excludesfile = ~/.gitignore_global
   editor = vim
 	filemode = false
+	ignorecase = true
 [apply]
   whitespace = nowarn
 [help]
