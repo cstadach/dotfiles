@@ -209,7 +209,7 @@ inoremap  <up>     <nop>
 inoremap  <down>   <nop>
 inoremap  <left>   <nop>
 inoremap  <right>  <nop>
-let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:ackprg = 'ag --nogroup --nocolor --column --skip-vcs-ignores --hidden --ignore-dir .git'
 
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
