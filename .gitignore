@@ -6,4 +6,5 @@ vim/vim.symlink/plugged/
 vim/vim.symlink/_temp
 vim/vim.symlink/_backup
 vim/vim.symlink/plugged
+homebrew/token.zsh
 .ruby-version
