@@ -1,7 +1,7 @@
 # Only set this if we haven't set $EDITOR up somewhere else previously.
 if [[ "$EDITOR" == "" ]] ; then
   # Use vim for my editor.
-  export EDITOR='vim'
+  export EDITOR='nvim'
 fi
 # add display for wsl 2
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
