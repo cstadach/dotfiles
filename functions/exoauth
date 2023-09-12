@@ -1,0 +1,10 @@
+#!/bin/bash -eu
+
+
+exoauth () {
+    get_op_item 'exoscale-dev-api-key'
+    export PKR_VAR_EXO_API_KEY="${OP_ITEM_USERNAME}"
+    export PKR_VAR_EXO_API_SECRET="${OP_ITEM_PASSWORD}"
+    export EXOSCALE_API_KEY="${OP_ITEM_USERNAME}"
+    export EXOSCALE_API_SECRET="${OP_ITEM_PASSWORD}"
+}

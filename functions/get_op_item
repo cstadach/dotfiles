@@ -1,0 +1,6 @@
+#!/bin/bash -eu
+
+get_op_item () {
+    OP_ITEM_USERNAME=$(op item get "$1" --fields label=username)
+    OP_ITEM_PASSWORD=$(op item get "$1" --fields label=password)
+}
