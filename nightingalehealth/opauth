@@ -1,0 +1,14 @@
+opauth () {
+    case $1 in
+        personal)
+            echo 'using personal 1pass token'
+            OP_ITEM_PASSWORD=$(op item get op-connect-token --fields label=password)
+            ;;
+        *)
+            echo "no environment given"
+            return 1
+            ;;
+    esac
+    export OP_CONNECT_HOST="https://opconnect.nightingale.zone"
+    export OP_CONNECT_TOKEN="${OP_ITEM_PASSWORD}"
+}
