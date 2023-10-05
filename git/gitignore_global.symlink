@@ -6,3 +6,5 @@
 *.rbc
 .tfswitchrc
 **/.env
+!.gitlab-ci.yml
+!.gitlab-ci.yaml
