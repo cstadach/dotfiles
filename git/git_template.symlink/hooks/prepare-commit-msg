@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ticket=$(git symbolic-ref HEAD | perl -pe '/(EMQ-\d+|XDN-\d+)/;$_=$1')
+ticket=$(git symbolic-ref HEAD | perl -pe '/(cs-infra-\d+|infra-\d+)/;$_=$1')
 
 if [ -n "${ticket}" ]; then
     if head -n1 "$1" | grep -v -q "${ticket}"; then
