@@ -8,3 +8,4 @@
 **/.env
 !.gitlab-ci.yml
 !.gitlab-ci.yaml
+!.checkov.baseline
