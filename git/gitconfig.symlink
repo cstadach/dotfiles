@@ -5,7 +5,7 @@
   protocol = https
 [user]
  name = Christian Stadach
- email = christian.stadach@otto.de
+ email = christian.stadach@nightingalehealth.com
 [credential]
   helper = cache --timeout=3600
 [alias]
