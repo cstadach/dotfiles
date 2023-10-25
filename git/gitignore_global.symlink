@@ -9,3 +9,5 @@
 !.gitlab-ci.yml
 !.gitlab-ci.yaml
 !.checkov.baseline
+!.pre-commit-config.yaml
+!.pre-commit-config.yml
