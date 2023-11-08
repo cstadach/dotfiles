@@ -1,0 +1,1 @@
+export HOMEBREW_AUTOREMOVE=1
