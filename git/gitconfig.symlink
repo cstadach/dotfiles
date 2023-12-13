@@ -3,9 +3,6 @@
 
 [hub]
   protocol = https
-[user]
- name = Christian Stadach
- email = christian.stadach@nightingalehealth.com
 [credential]
   helper = cache --timeout=3600
 [alias]
@@ -100,3 +97,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[include]
+	path = ~/.config/gitconfig
