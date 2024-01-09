@@ -20,3 +20,8 @@ case $( uname -s ) in
     alias tar="gtar"
     ;;
   esac
+
+    if $(bat -h &>/dev/null)
+    then
+      alias cat=bat
+    fi
