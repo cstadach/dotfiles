@@ -1,5 +1,5 @@
 #!/bin/bash -eu
 
 get_op_passwd () {
-    OP_ITEM_PASSWORD=$(op item get "$1" --fields label=password)
+    OP_ITEM_PASSWORD=$(op item get "$1" --reveal --fields label=password)
 }
