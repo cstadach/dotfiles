@@ -10,9 +10,9 @@ load-tfswitch() {
   elif [ -f "$versions_tf_path" ]; then
     tfswitch
   else
-    tfswitch --latest >/dev/null 2>&1
+    tfswitch 1.11.1 >/dev/null 2>&1
   fi
-
+  export TG_TF_PATH=`which terraform`
 }
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch
