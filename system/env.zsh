@@ -8,3 +8,6 @@ if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
   export DISPLAY=$(ip route | awk '{print $3; exit}'):0
   export LIBGL_ALWAYS_INDIRECT=1
 fi
+if [[ "$XDG_CONFIG_HOME" == "" ]] ; then
+  export XDG_CONFIG_HOME="$HOME/.config"
+fi
