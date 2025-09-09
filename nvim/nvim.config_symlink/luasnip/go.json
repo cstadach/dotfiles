@@ -1,0 +1,591 @@
+{
+  ":": {
+    "prefix": ":",
+    "description": "v := value",
+    "body": "$1 := $0",
+    "luasnip": {
+      "priority": -10
+    }
+  },
+  "anon": {
+    "prefix": "anon",
+    "description": "fn := func() { ... }",
+    "body": [
+      "${1:fn} := func() {",
+      "\t${2:$TM_SELECTED_TEXT}",
+      "\\}",
+      "$0"
+    ]
+  },
+  "ap": {
+    "prefix": "ap",
+    "description": "append(slice, value)",
+    "body": "append(${1:slice}, ${0:value})"
+  },
+  "ap=": {
+    "prefix": "ap=",
+    "description": "a = append(a, value)",
+    "body": "${1:slice} = append($1, ${0:value})"
+  },
+  "br": {
+    "prefix": "br",
+    "description": "break",
+    "body": "break"
+  },
+  "ch": {
+    "prefix": "ch",
+    "description": "chan Type",
+    "body": "chan ${0:int}"
+  },
+  "case": {
+    "prefix": "case",
+    "description": "case ...:",
+    "body": [
+      "case ${1:value}:",
+      "\t${0:$TM_SELECTED_TEXT}"
+    ]
+  },
+  "con": {
+    "prefix": "con",
+    "description": "const XXX Type = ...",
+    "body": "const ${1:NAME} ${2:Type} = ${0:0}"
+  },
+  "cons": {
+    "prefix": "cons",
+    "description": "const ( ... )",
+    "body": [
+      "const (",
+      "\t${1:NAME} ${2:Type} = ${3:value}",
+      "\t$0",
+      ")"
+    ]
+  },
+  "iota": {
+    "prefix": "iota",
+    "description": "const ( ... = iota )",
+    "body": [
+      "const (",
+      "\t${1:NAME} ${2:Type} = iota",
+      "\t$0",
+      ")"
+    ]
+  },
+  "cn": {
+    "prefix": "cn",
+    "description": "continue",
+    "body": "continue"
+  },
+  "default": {
+    "prefix": "default",
+    "description": "default: ...",
+    "body": [
+      "default:",
+      "\t${0:$TM_SELECTED_TEXT}"
+    ]
+  },
+  "df": {
+    "prefix": "df",
+    "description": "defer someFunction()",
+    "body": [
+      "defer ${1:func}($2)",
+      "$0"
+    ]
+  },
+  "def": {
+    "prefix": "def",
+    "description": "defer func() { ... }",
+    "body": [
+      "defer func() {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}()"
+    ]
+  },
+  "defr": {
+    "prefix": "defr",
+    "body": [
+      "defer func() {",
+      "\tif err := recover(); err != nil {",
+      "\t\t${0:$TM_SELECTED_TEXT}",
+      "\t\\}",
+      "\\}()"
+    ]
+  },
+  "import": {
+    "prefix": "import",
+    "description": "import ( ... )",
+    "body": [
+      "import (",
+      "\t\"${1:package}\"",
+      ")"
+    ]
+  },
+  "interface": {
+    "prefix": "interface",
+    "description": "interface I { ... }",
+    "body": [
+      "type ${1:Interface} interface {",
+      "\t${2:/* TODO: add methods */}",
+      "\\}"
+    ]
+  },
+  "if": {
+    "prefix": "if",
+    "description": "if ... { ... }",
+    "body": [
+      "if ${1:condition} {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "else": {
+    "prefix": "else",
+    "body": [
+      "else {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "ife": {
+    "prefix": "ife",
+    "description": "If with inline error",
+    "body": [
+      "if err := ${1:condition}; err != nil {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "ew": {
+    "prefix": "ew",
+    "description": "errors.Wrap",
+    "body": "errors.Wrap(${1:err}, \"${2:message}\")"
+  },
+  "ewf": {
+    "prefix": "ewf",
+    "description": "errors.Wrapf",
+    "body": "errors.Wrapf(${1:err}, \"${2:message %v}\", ${3:args...})"
+  },
+  "errn": {
+    "prefix": "errn",
+    "description": "Error return",
+    "body": [
+      "if err != nil {",
+      "\treturn err",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errnw": {
+    "prefix": "errnw",
+    "description": "Error return wrap",
+    "body": [
+      "if err != nil {",
+      "\treturn errors.Wrap(err, \"${1:message}\")",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errnwf": {
+    "prefix": "errnwf",
+    "description": "Error return wrapf",
+    "body": [
+      "if err != nil {",
+      "\treturn errors.Wrapf(err, \"${1:message %v}\", ${2:args...})",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errl": {
+    "prefix": "errl",
+    "description": "Error with log.Fatal(err)",
+    "body": [
+      "if err != nil {",
+      "\tlog.Fatal(err)",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errn,": {
+    "prefix": "errn,",
+    "description": "Error return with two return values",
+    "body": [
+      "if err != nil {",
+      "\treturn ${1:nil}, ${2:err}",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errn,w": {
+    "prefix": "errn,w",
+    "description": "Error return wrap with two return values",
+    "body": [
+      "if err != nil {",
+      "\treturn nil, errors.Wrap(err, \"${1:message}\")",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errn,wf": {
+    "prefix": "errn,wf",
+    "description": "Error return wrapf with two return values",
+    "body": [
+      "if err != nil {",
+      "\treturn nil, errors.Wrapf(err, \"${1:message %v}\", ${2:args...})",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errp": {
+    "prefix": "errp",
+    "description": "Error panic",
+    "body": [
+      "if err != nil {",
+      "\tpanic($1)",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errt": {
+    "prefix": "errt",
+    "description": "Error test fatal ",
+    "body": [
+      "if err != nil {",
+      "\tt.Fatal(err)",
+      "\\}",
+      "$0"
+    ]
+  },
+  "errh": {
+    "prefix": "errh",
+    "description": "Error handle and return",
+    "body": [
+      "if err != nil {",
+      "\t$1",
+      "\treturn",
+      "\\}",
+      "$0"
+    ]
+  },
+  "ft": {
+    "prefix": "ft",
+    "description": "fallthrough",
+    "body": "fallthrough"
+  },
+  "for": {
+    "prefix": "for",
+    "description": "for ... { ... }",
+    "body": [
+      "for $1 {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "fori": {
+    "prefix": "fori",
+    "description": "for 0..N-1 { ... }",
+    "body": [
+      "for ${1:i} := 0; $1 < ${2:N}; $1++ {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "forr": {
+    "prefix": "forr",
+    "description": "for k, v := range items { ... }",
+    "body": [
+      "for ${2:k}, ${3:v} := range $1 {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "forsel": {
+    "prefix": "forsel",
+    "description": "for select",
+    "body": [
+      "for {",
+      "\tselect {",
+      "\t\tcase ${2:${1:result} := }<- ${3:channel}:",
+      "\t\t\t$0",
+      "\t\\}",
+      "\\}"
+    ]
+  },
+  "selc": {
+    "prefix": "selc",
+    "description": "select case",
+    "body": [
+      "case ${1:${2:var} := }<-${3:channel}:",
+      "  $0"
+    ]
+  },
+  "ff": {
+    "prefix": "ff",
+    "description": "fmt.Printf(...)",
+    "body": "fmt.Printf(\"$1 = %+v\\n\", ${1:$TM_SELECTED_TEXT})"
+  },
+  "ffh": {
+    "prefix": "ffh",
+    "description": "fmt.Printf(#...) hash",
+    "body": "fmt.Printf(\"$1 = %#v\\n\", ${1:$TM_SELECTED_TEXT})"
+  },
+  "fn": {
+    "prefix": "fn",
+    "description": "fmt.Println(...)",
+    "body": "fmt.Println(\"${1:$TM_SELECTED_TEXT}\")"
+  },
+  "fe": {
+    "prefix": "fe",
+    "description": "fmt.Errorf(...)",
+    "body": "fmt.Errorf(\"${1:$TM_SELECTED_TEXT}\")"
+  },
+  "few": {
+    "prefix": "few",
+    "description": "fmt.Errorf(%w, err)",
+    "body": "fmt.Errorf(\"${1:message}: %w\", ${2:${TM_SELECTED_TEXT:err}})"
+  },
+  "errnfw": {
+    "prefix": "errnfw",
+    "description": "Error return fmt.Errorf(%w, err)",
+    "body": [
+      "if ${1:${TM_SELECTED_TEXT:err}} != nil {",
+      "\treturn fmt.Errorf(\"${2:message}: %w\", $1)",
+      "\\}"
+    ]
+  },
+  "lf": {
+    "prefix": "lf",
+    "description": "log.Printf(...)",
+    "body": "log.Printf(\"${1:$TM_SELECTED_TEXT} = %+v\\n\", $1)"
+  },
+  "ln": {
+    "prefix": "ln",
+    "description": "log.Println(...)",
+    "body": "log.Println(\"${1:$TM_SELECTED_TEXT}\")"
+  },
+  "make": {
+    "prefix": "make",
+    "description": "make(Type, size)",
+    "body": "make(${1:[]string}, ${2:0})$0"
+  },
+  "map": {
+    "prefix": "map",
+    "description": "map[Type]Type",
+    "body": "map[${1:string}]${0:int}"
+  },
+  "main": {
+    "prefix": "main",
+    "description": "func main() { ... }",
+    "body": [
+      "func main() {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "ok": {
+    "prefix": "ok",
+    "description": "if !ok { ... }",
+    "body": [
+      "if !ok {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "package": {
+    "prefix": "package",
+    "description": "package ...",
+    "body": [
+      "// Package $1 provides ${2:...}",
+      "package ${1:main}",
+      "$0"
+    ]
+  },
+  "pn": {
+    "prefix": "pn",
+    "description": "panic()",
+    "body": "panic(\"${0:msg}\")"
+  },
+  "rt": {
+    "prefix": "rt",
+    "description": "return",
+    "body": "return ${0:$TM_SELECTED_TEXT}"
+  },
+  "select": {
+    "prefix": "select",
+    "description": "select { case a := <-chan: ... }",
+    "body": [
+      "select {",
+      "case ${1:v1} := <-${2:chan1}:",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "st": {
+    "prefix": "st",
+    "description": "type T struct { ... }",
+    "body": [
+      "type ${1:Type} struct {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "switch": {
+    "prefix": "switch",
+    "description": "switch x { ... }",
+    "body": [
+      "switch ${1:var} {",
+      "case ${2:value1}:",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "tswitch": {
+    "prefix": "tswitch",
+    "description": "type switch x { ... }",
+    "body": [
+      "switch ${2:$1 := }${1:v}.(type) {",
+      "\t$0",
+      "\\}"
+    ]
+  },
+  "sp": {
+    "prefix": "sp",
+    "description": "fmt.Sprintf(...)",
+    "body": "fmt.Sprintf(\"%${1:s}\", ${2:var})"
+  },
+  "go": {
+    "prefix": "go",
+    "description": "go someFunc(...)",
+    "body": "go ${1:funcName}($0)"
+  },
+  "gof": {
+    "prefix": "gof",
+    "description": "go func() { ... }()",
+    "body": [
+      "go func() {",
+      "\t${1:$TM_SELECTED_TEXT}",
+      "\\}()",
+      "$0"
+    ]
+  },
+  "test": {
+    "prefix": "test",
+    "description": "func TestXYZ(t *testing.T) { ... }",
+    "body": [
+      "func Test${1:Function}(t *testing.T) {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\\}"
+    ]
+  },
+  "tr": {
+    "prefix": "tr",
+    "description": "t.Run(XYZ, func(t *testing.T){ ... })",
+    "body": [
+      "t.Run(\"$0\", func(t *testing.T){",
+      "",
+      "\\})"
+    ]
+  },
+  "tt": {
+    "prefix": "tt",
+    "body": [
+      "var tests = []struct {",
+      "\tname string",
+      "\texpected string",
+      "\tgiven string",
+      "\\}{",
+      "\t{\"$1\", \"$2\", \"$3\",\\},",
+      "\\}",
+      "for _, tt := range tests {",
+      "\ttt := tt",
+      "\tt.Run(tt.name, func(t *testing.T){",
+      "\t\tactual := ${0:$TM_SELECTED_TEXT}(tt.given)",
+      "\t\tif actual != tt.expected {",
+      "\t\t\t\tt.Errorf(\"$0(%s): expected %s, actual %s\", tt.given, tt.expected, actual)",
+      "\t\t\\}",
+      "",
+      "\t\\})",
+      "\\}"
+    ]
+  },
+  "hf": {
+    "prefix": "hf",
+    "description": "http.HandlerFunc",
+    "body": [
+      "func ${1:handler}(w http.ResponseWriter, r *http.Request) {",
+      "\t${0:fmt.Fprintf(w, \"hello world\")}",
+      "\\}"
+    ]
+  },
+  "hhf": {
+    "prefix": "hhf",
+    "description": "mux.HandleFunc",
+    "body": [
+      "${1:http}.HandleFunc(\"${2:/}\", func(w http.ResponseWriter, r *http.Request) {",
+      "\t${0:fmt.Fprintf(w, \"hello world\")}",
+      "\\})"
+    ]
+  },
+  "ter": {
+    "prefix": "ter",
+    "description": "if err != nil { t.Errorf(...) }",
+    "body": [
+      "if err != nil {",
+      "\tt.Errorf(\"${0:message}\")",
+      "\\}"
+    ]
+  },
+  "terf": {
+    "prefix": "terf",
+    "description": "if err != nil { t.Fatalf(...) }",
+    "body": [
+      "if err != nil {",
+      "\tt.Fatalf(\"${0:message}\")",
+      "\\}"
+    ]
+  },
+  "example": {
+    "prefix": "example",
+    "description": "func ExampleXYZ() { ... }",
+    "body": [
+      "func Example${1:Method}() {",
+      "\t${0:$TM_SELECTED_TEXT}",
+      "\t// Output:",
+      "\\}"
+    ]
+  },
+  "benchmark": {
+    "prefix": "benchmark",
+    "description": "func BenchmarkXYZ(b *testing.B) { ... }",
+    "body": [
+      "func Benchmark${1:Method}(b *testing.B) {",
+      "\tfor i := 0; i < b.N; i++ {",
+      "\t\t${0:$TM_SELECTED_TEXT}",
+      "\t\\}",
+      "\\}"
+    ]
+  },
+  "var": {
+    "prefix": "var",
+    "description": "var x Type [= ...]",
+    "body": "var ${1:x} ${2:Type}${3: = ${0:value}}"
+  },
+  "vars": {
+    "prefix": "vars",
+    "description": "var ( ... )",
+    "body": [
+      "var (",
+      "\t${1:x} ${2:Type}${3: = ${0:value}}",
+      ")"
+    ]
+  },
+  "eq": {
+    "prefix": "eq",
+    "description": "equals: test two identifiers with DeepEqual",
+    "body": [
+      "if !reflect.DeepEqual(${1:expected}, ${2:actual}) {",
+      "\t_, file, line, _ := runtime.Caller(0)",
+      "\tfmt.Printf(\"%s:%d:\\n\\n\\texp: %#v\\n\\n\\tgot: %#v\\n\\n\", filepath.Base(file), line, $1, $2)",
+      "\tt.FailNow()",
+      "\\}"
+    ]
+  }
+}
