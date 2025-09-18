@@ -52,3 +52,5 @@ theme = dark:nightfox,light:dayfox
 keybind = cmd+l=next_tab
 keybind = cmd+h=previous_tab
 copy-on-select = clipboard
+
+right-click-action = context-menu
