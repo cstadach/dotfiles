@@ -85,14 +85,12 @@
 	sslCAinfo = /etc/ssl/certs/ca-certificates.crt
 	sslverify = false
 [merge]
-	tool = vimdiff
-	conflictstyle = diff3
-#[mergetool "meld"]
-#  # Choose one of these 2 lines (not both!) explained below.
-#  cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
-#  #cmd = meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+  tool = diffview
 [mergetool]
-	prompt = false
+  prompt = false
+  keepBackup = false
+[mergetool "diffview"]
+  cmd = nvim -n -c "DiffviewOpen" "$MERGE"
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
