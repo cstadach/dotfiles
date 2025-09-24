@@ -10,3 +10,4 @@ homebrew/token.zsh
 .ruby-version
 nightingalehealth/
 functions/nutanixauth
+nvim/nvim.config_symlink/lazy-lock.json
