@@ -26,6 +26,7 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
   'tpope/vim-surround',
+  'sindrets/diffview.nvim',
   {
     'hashivim/vim-terraform',
     config = function ()
