@@ -156,21 +156,27 @@ require('lazy').setup({
     name = "catppuccin",
     priority = 1000,
     config = function()
-      require("catppuccin").setup {
+      require("catppuccin").setup({
         background = { light = "latte", dark = "mocha" },
-      }
-      -- vim.cmd.colorscheme 'catppuccin'
+        auto_integrations = true,
+        integrations = {
+          gitsigns = true,
+          nvimtree = true,
+          telescope = { enabled = true, },
+        }
+      })
+      vim.cmd.colorscheme "catppuccin-nvim"
     end,
   },
 
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons', 'catppuccin/nvim' },
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'catppuccin/nvim' },
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'catppuccin',
+        theme = 'catppuccin-nvim',
         component_separators = '|',
         section_separators = '',
       },
