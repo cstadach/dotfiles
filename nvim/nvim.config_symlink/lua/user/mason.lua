@@ -47,10 +47,10 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local lsp_servers = {
-  -- clangd = {},
   gopls = {},
   pyright = {},
   terraformls = {},
+  clangd = {},
   -- rust_analyzer = {},
   -- tsserver = {},
 

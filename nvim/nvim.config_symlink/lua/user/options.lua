@@ -35,3 +35,6 @@ vim.wo.number = true
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
 
+-- Disable LSP logging
+vim.lsp.log.set_level("off")
+
