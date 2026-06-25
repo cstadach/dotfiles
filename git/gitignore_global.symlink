@@ -1,7 +1,6 @@
 .DS_Store
 .svn
 .idea
-.terraform
 *~
 *.swp
 *.rbc

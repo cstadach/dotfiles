@@ -16,7 +16,7 @@
   ff = merge --ff-only
   pullff = pull --ff-only
   noff = merge --no-ff
-  fa = fetch --all --prune
+  fa = fetch --all
   pom = push origin master
   ptrack = push -u
   b = branch
@@ -98,3 +98,6 @@
 	required = true
 [include]
 	path = ~/.config/git/gitconfig
+[user]
+	name = Christian
+	email = christian@stadach.com
