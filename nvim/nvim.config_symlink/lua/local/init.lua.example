@@ -1,0 +1,6 @@
+-- Copy this file to lua/local/init.lua (gitignored) and set your profile.
+-- 'work'  → GitHub Copilot + CopilotChat (default, no file needed)
+-- 'home'  → avante.nvim with Claude via ANTHROPIC_API_KEY
+return {
+  profile = 'work',
+}

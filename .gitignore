@@ -11,3 +11,4 @@ homebrew/token.zsh
 nightingalehealth/
 functions/nutanixauth
 nvim/nvim.config_symlink/lazy-lock.json
+nvim/nvim.config_symlink/lua/local/init.lua

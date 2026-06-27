@@ -11,6 +11,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local ok, local_cfg = pcall(require, 'local')
+local profile = (ok and local_cfg.profile) or 'work'
+
 require('lazy').setup({
 
   -- Editing utilities
@@ -76,12 +79,14 @@ require('lazy').setup({
     },
   },
 
-  -- AI / Copilot
+  -- AI / Copilot (work profile)
   {
     'github/copilot.vim',
+    cond = profile == 'work',
     config = function()
       vim.g.copilot_filetypes = {
         ['*']          = false,
+        ['go']         = true,
         ['lua']        = true,
         ['tf']         = true,
         ['yaml']       = true,
@@ -93,11 +98,13 @@ require('lazy').setup({
         ['typescript'] = true,
         ['html']       = true,
         ['css']        = true,
+        ['sh']         = true,
       }
     end,
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
+    cond = profile == 'work',
     dependencies = {
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
@@ -108,6 +115,30 @@ require('lazy').setup({
         require('CopilotChat').toggle()
       end, { desc = 'Toggle CopilotChat' })
     end,
+  },
+
+  -- AI / avante.nvim with Claude (home profile)
+  {
+    'yetone/avante.nvim',
+    cond = profile == 'home',
+    event = 'VeryLazy',
+    build = 'make',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'stevearc/dressing.nvim',
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    opts = {
+      provider = 'claude',
+      claude = {
+        endpoint    = 'https://api.anthropic.com',
+        model       = 'claude-sonnet-4-6',
+        api_key_name = 'ANTHROPIC_API_KEY',
+        max_tokens  = 8192,
+      },
+    },
   },
 
   -- LSP
