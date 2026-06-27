@@ -44,11 +44,36 @@ require('lazy').setup({
 
   -- Infrastructure / DevOps
   'rhadley-recurly/vim-terragrunt',
+  { 'hashivim/vim-terraform' },
+
+  -- Formatting
   {
-    'hashivim/vim-terraform',
-    config = function()
-      vim.g.terraform_fmt_on_save = 1
-    end,
+    'stevearc/conform.nvim',
+    event = 'BufWritePre',
+    opts = {
+      formatters_by_ft = {
+        go         = { 'goimports', 'gofmt' },
+        python     = { 'ruff_format' },
+        typescript = { 'prettier' },
+        javascript = { 'prettier' },
+        yaml       = { 'prettier' },
+        json       = { 'prettier' },
+        sh         = { 'shfmt' },
+        bash       = { 'shfmt' },
+        terraform  = { 'terraform_fmt' },
+        hcl        = { 'terraform_fmt' },
+      },
+      format_on_save = { timeout_ms = 500, lsp_fallback = true },
+    },
+  },
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    opts = {
+      ensure_installed = {
+        'goimports', 'ruff', 'prettier', 'shfmt',
+        'tflint', 'ansible-lint',
+      },
+    },
   },
 
   -- AI / Copilot
