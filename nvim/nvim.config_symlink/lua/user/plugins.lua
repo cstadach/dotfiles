@@ -222,7 +222,17 @@ require('lazy').setup({
   {
     'famiu/bufdelete.nvim',
     config = function()
-      vim.api.nvim_create_user_command('BufferClose', 'Bdelete', {})
+      -- Alias BufferLine* commands to Buffer* for consistency with old barbar names
+      for alias, cmd in pairs({
+        BufferPick        = 'BufferLinePick',
+        BufferCloseOthers = 'BufferLineCloseOthers',
+        BufferCloseLeft   = 'BufferLineCloseLeft',
+        BufferCloseRight  = 'BufferLineCloseRight',
+        BufferClose       = 'Bdelete',
+        BufferCloseAll    = 'bufdo Bdelete',
+      }) do
+        vim.api.nvim_create_user_command(alias, cmd, {})
+      end
     end,
   },
   {
