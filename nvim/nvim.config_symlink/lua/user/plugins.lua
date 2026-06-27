@@ -220,6 +220,12 @@ require('lazy').setup({
     },
   },
   {
+    'famiu/bufdelete.nvim',
+    config = function()
+      vim.api.nvim_create_user_command('BufferClose', 'Bdelete', {})
+    end,
+  },
+  {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     opts = { indent = { char = '┊' } },
