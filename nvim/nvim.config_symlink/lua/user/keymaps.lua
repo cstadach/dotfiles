@@ -35,7 +35,6 @@ map('n', '<C-k>', '<C-w><C-k>')
 map('n', '<C-l>', '<C-w><C-l>')
 map('n', '<C-h>', '<C-w><C-h>')
 
--- Magic buffer-picking mode
-map('n', '<C-p>', '<Cmd>BufferPick<CR>', opts)
--- Sort automatically by...
-map('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<CR>', opts)
+-- Buffer picking and sorting (bufferline)
+map('n', '<C-p>', '<Cmd>BufferLinePick<CR>', opts)
+map('n', '<Space>bb', '<Cmd>BufferLineSortByTabs<CR>', opts)

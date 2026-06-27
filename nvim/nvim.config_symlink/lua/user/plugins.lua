@@ -208,13 +208,15 @@ require('lazy').setup({
     },
   },
   {
-    'romgrk/barbar.nvim',
+    'akinsho/bufferline.nvim',
+    version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    init = function() vim.g.barbar_auto_setup = false end,
     opts = {
-      animation = false,
-      insert_at_start = false,
-      insert_at_end = true,
+      options = {
+        show_buffer_close_icons = true,
+        show_close_icon = false,
+        always_show_bufferline = true,
+      },
     },
   },
   {
