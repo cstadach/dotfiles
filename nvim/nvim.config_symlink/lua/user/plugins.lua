@@ -79,10 +79,9 @@ require('lazy').setup({
     },
   },
 
-  -- AI / Copilot (work profile)
+  -- AI / Copilot
   {
     'github/copilot.vim',
-    cond = profile == 'work',
     config = function()
       vim.g.copilot_filetypes = {
         ['*']          = false,
@@ -104,7 +103,6 @@ require('lazy').setup({
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
-    cond = profile == 'work',
     dependencies = {
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
@@ -115,34 +113,6 @@ require('lazy').setup({
         require('CopilotChat').toggle()
       end, { desc = 'Toggle CopilotChat' })
     end,
-  },
-
-  -- AI / avante.nvim with Claude (home profile)
-  -- API key is fetched from 1Password on first use (Touch ID), then cached
-  -- for the session. Same secret reference as claude-sandbox.zsh.
-  {
-    'yetone/avante.nvim',
-    cond = profile == 'home',
-    event = 'VeryLazy',
-    build = 'make',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      'stevearc/dressing.nvim',
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
-    opts = {
-      provider = 'claude',
-      providers = {
-        claude = {
-          endpoint     = 'https://api.anthropic.com',
-          model        = 'claude-sonnet-4-6',
-          api_key_name = "cmd:bash -l -c \"op read 'op://Private/Anthropic/credential'\"",
-          extra_request_body = { max_tokens = 8192 },
-        },
-      },
-    },
   },
 
   -- LSP
