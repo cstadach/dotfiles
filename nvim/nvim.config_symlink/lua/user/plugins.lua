@@ -138,7 +138,7 @@ require('lazy').setup({
         claude = {
           endpoint     = 'https://api.anthropic.com',
           model        = 'claude-sonnet-4-6',
-          api_key_name = "cmd:op read 'op://Private/Anthropic/credential'",
+          api_key_name = "cmd:bash -l -c \"op read 'op://Private/Anthropic/credential'\"",
           extra_request_body = { max_tokens = 8192 },
         },
       },
