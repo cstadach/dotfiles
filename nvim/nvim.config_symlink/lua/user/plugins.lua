@@ -118,6 +118,8 @@ require('lazy').setup({
   },
 
   -- AI / avante.nvim with Claude (home profile)
+  -- API key is fetched from 1Password on first use (Touch ID), then cached
+  -- for the session. Same secret reference as claude-sandbox.zsh.
   {
     'yetone/avante.nvim',
     cond = profile == 'home',
@@ -133,10 +135,24 @@ require('lazy').setup({
     opts = {
       provider = 'claude',
       claude = {
-        endpoint    = 'https://api.anthropic.com',
-        model       = 'claude-sonnet-4-6',
-        api_key_name = 'ANTHROPIC_API_KEY',
-        max_tokens  = 8192,
+        endpoint   = 'https://api.anthropic.com',
+        model      = 'claude-sonnet-4-6',
+        max_tokens = 8192,
+        -- Called once on first request; result cached for the nvim session.
+        api_key_name = function()
+          if vim.g._anthropic_api_key then return vim.g._anthropic_api_key end
+          local key = vim.trim(vim.fn.system(
+            "op read 'op://Private/Anthropic/credential' 2>/dev/null"
+          ))
+          if key == '' then
+            vim.notify('[avante] 1Password: could not read Anthropic key.\n'
+              .. "Check: op read 'op://Private/Anthropic/credential'",
+              vim.log.levels.ERROR)
+            return ''
+          end
+          vim.g._anthropic_api_key = key
+          return key
+        end,
       },
     },
   },
