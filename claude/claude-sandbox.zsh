@@ -1,7 +1,8 @@
 # dotfiles/claude/claude-sandbox.zsh
 # Auto-sourced by holman dotfiles (topic/*.zsh convention)
 # Runs Claude Code in a sandboxed Docker container with per-project memory.
-# API key is fetched from 1Password at runtime (Touch ID) — never stored in plaintext.
+# OAuth credentials are fetched from 1Password at runtime (Touch ID) and written
+# into the per-project .claude/ folder — never stored in plaintext long-term.
 # Optionally bridges to a running claudecode.nvim WebSocket server.
 #
 # Requirements:
@@ -24,15 +25,21 @@ claude-sandbox() {
   local RED='\033[0;31m'
   local NC='\033[0m'
 
-  _cs_fetch_key() {
-    echo "${BLUE}[sandbox]${NC} Fetching API key from 1Password (Touch ID)..."
-    local key
-    key=$(op read "$OP_KEY_REF" 2>/dev/null)
-    if [[ -z "$key" ]]; then
+  _cs_write_credentials() {
+    echo "${BLUE}[sandbox]${NC} Fetching credentials from 1Password (Touch ID)..."
+    local value
+    value=$(op read "$OP_KEY_REF" 2>/dev/null)
+    if [[ -z "$value" ]]; then
       echo "${RED}[sandbox]${NC} Could not read from 1Password: ${OP_KEY_REF}" >&2
       return 1
     fi
-    echo "$key"
+    # If value is already a JSON object write it directly, otherwise wrap it
+    # as a claudeAiOauthToken so Claude Code recognises it as an OAuth session.
+    if [[ "$value" == \{* ]]; then
+      echo "$value" > "${1}"
+    else
+      printf '{"claudeAiOauthToken":"%s"}\n' "$value" > "${1}"
+    fi
   }
 
   _cs_check() {
@@ -95,12 +102,10 @@ EOF
   }
 
   _cs_run() {
-    local api_key="$1"
-    shift
     local project_dir="${PWD}"
     local claude_dir="${project_dir}/.claude"
     mkdir -p "$claude_dir/ide"
-    rm -f "${claude_dir}/credentials.json"
+    _cs_write_credentials "${claude_dir}/credentials.json" || return 1
 
     echo "${BLUE}[sandbox]${NC} Project : ${project_dir}"
     echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
@@ -146,7 +151,6 @@ LOCKEOF
       -v "${project_dir}:${project_dir}" \
       -v "${claude_dir}:/root/.claude" \
       --cap-drop ALL \
-      -e ANTHROPIC_API_KEY="${api_key}" \
       -e TERM=xterm-256color \
       -w "${project_dir}" \
       "${IMAGE_NAME}" \
@@ -177,12 +181,10 @@ LOCKEOF
       ;;
     *)
       _cs_check || return 1
-      local api_key
-      api_key=$(_cs_fetch_key) || return 1
       if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
         _cs_build
       fi
-      _cs_run "$api_key" "$@"
+      _cs_run "$@"
       ;;
   esac
 }
