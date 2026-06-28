@@ -1,0 +1,3 @@
+#!/usr/bin/env zsh
+source "${DOTFILES:-$HOME/.dotfiles}/claude/claude-sandbox.zsh"
+claude-sandbox "$@"

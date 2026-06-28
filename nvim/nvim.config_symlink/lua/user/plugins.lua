@@ -79,9 +79,10 @@ require('lazy').setup({
     },
   },
 
-  -- AI / Copilot
+  -- AI / Copilot (work profile)
   {
     'github/copilot.vim',
+    cond = profile == 'work',
     config = function()
       vim.g.copilot_filetypes = {
         ['*']          = false,
@@ -103,6 +104,7 @@ require('lazy').setup({
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
+    cond = profile == 'work',
     dependencies = {
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
@@ -112,6 +114,22 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>aa', function()
         require('CopilotChat').toggle()
       end, { desc = 'Toggle CopilotChat' })
+    end,
+  },
+
+  -- AI / claudecode.nvim with Claude Pro via sandboxed Docker (home profile)
+  -- Runs `claude-sandbox` instead of bare `claude` — only the current working
+  -- directory is mounted; each project gets its own .claude/ memory folder.
+  -- Neovim IDE bridge (inline diffs, context) is wired up automatically.
+  {
+    'coder/claudecode.nvim',
+    cond = profile == 'home',
+    opts = {
+      terminal_cmd = 'claude-sandbox',
+    },
+    config = function(_, opts)
+      require('claudecode').setup(opts)
+      vim.keymap.set('n', '<leader>aa', '<cmd>ClaudeCode<cr>', { desc = 'Toggle Claude (sandboxed)' })
     end,
   },
 

@@ -1,22 +1,22 @@
 # dotfiles/claude/claude-sandbox.zsh
 # Auto-sourced by holman dotfiles (topic/*.zsh convention)
-# Runs Claude Code in a sandboxed Docker container.
-# API key is fetched from 1Password at runtime — never stored in plaintext.
+# Runs Claude Code in a sandboxed Docker container with per-project memory.
+# API key is fetched from 1Password at runtime (Touch ID) — never stored in plaintext.
+# Optionally bridges to a running claudecode.nvim WebSocket server.
 #
-# Setup:
-#   1. brew install 1password-cli
-#   2. Enable: 1Password app → Settings → Developer → Integrate with 1Password CLI
-#   3. Save your Anthropic API key in 1Password as an item named "Anthropic"
-#      with a field named "api-key" (or adjust OP_SECRET_REF below)
-#   4. Run: claude-sandbox
-
-# 1Password secret reference — adjust vault/item/field to match yours
-# Find it in 1Password: right-click field → Copy Secret Reference
-OP_ANTHROPIC_REF="op://Private/Anthropic/credential"
+# Requirements:
+#   Docker Desktop running
+#   brew install 1password-cli socat jq
+#
+# Usage:
+#   claude-sandbox [--build] [--help] [claude flags]
+#
+# Per-project .claude/ is created in the current directory.
+# Add .claude/ to your project's .gitignore.
 
 claude-sandbox() {
   local IMAGE_NAME="claude-sandbox"
-  local WORK_DIR="/workspace"
+  local OP_KEY_REF="op://Private/Anthropic/credential"
 
   local BLUE='\033[0;34m'
   local GREEN='\033[0;32m'
@@ -24,102 +24,165 @@ claude-sandbox() {
   local RED='\033[0;31m'
   local NC='\033[0m'
 
-  _claude_sandbox_check() {
-    if ! command -v docker &>/dev/null; then
-      echo -e "${RED}[sandbox]${NC} Docker not found — brew install --cask docker"
-      return 1
-    fi
-    if ! docker info &>/dev/null 2>&1; then
-      echo -e "${RED}[sandbox]${NC} Docker not running — start Docker Desktop."
-      return 1
-    fi
-    if ! command -v op &>/dev/null; then
-      echo -e "${RED}[sandbox]${NC} 1Password CLI not found — brew install 1password-cli"
-      return 1
-    fi
-    if ! op account list &>/dev/null 2>&1; then
-      echo -e "${RED}[sandbox]${NC} Not signed in to 1Password — run: op signin"
-      return 1
-    fi
-  }
-
-  _claude_sandbox_fetch_key() {
-    echo -e "${BLUE}[sandbox]${NC} Fetching API key from 1Password (Touch ID)..."
+  _cs_fetch_key() {
+    echo "${BLUE}[sandbox]${NC} Fetching API key from 1Password (Touch ID)..."
     local key
-    key=$(op read "$OP_ANTHROPIC_REF" 2>/dev/null)
+    key=$(op read "$OP_KEY_REF" 2>/dev/null)
     if [[ -z "$key" ]]; then
-      echo -e "${RED}[sandbox]${NC} Could not read key from 1Password."
-      echo -e "         Check that the secret reference is correct: ${OP_ANTHROPIC_REF}"
-      echo -e "         Or update OP_ANTHROPIC_REF in dotfiles/claude/claude-sandbox.zsh"
+      echo "${RED}[sandbox]${NC} Could not read from 1Password: ${OP_KEY_REF}" >&2
       return 1
     fi
     echo "$key"
   }
 
-  _claude_sandbox_build() {
-    echo -e "${BLUE}[sandbox]${NC} Building image (once)..."
-    docker build --quiet -t "$IMAGE_NAME" - <<'DOCKERFILE'
+  _cs_check() {
+    if ! command -v docker &>/dev/null; then
+      echo "${RED}[sandbox]${NC} Docker not found — brew install --cask docker" >&2
+      return 1
+    fi
+    if ! docker info &>/dev/null 2>&1; then
+      echo "${RED}[sandbox]${NC} Docker not running — start Docker Desktop." >&2
+      return 1
+    fi
+    if ! command -v op &>/dev/null; then
+      echo "${RED}[sandbox]${NC} 1Password CLI not found — brew install 1password-cli" >&2
+      return 1
+    fi
+  }
+
+  _cs_build() {
+    echo "${BLUE}[sandbox]${NC} Building image..."
+    local ctx
+    ctx=$(mktemp -d)
+
+    # Entrypoint: set up Neovim IDE bridge, then run claude.
+    # The bridge connects container 127.0.0.1:RELAY_PORT to the host socat
+    # which relays to claudecode.nvim's WebSocket server.
+    cat > "$ctx/entrypoint.sh" <<'EOF'
+#!/bin/bash
+set -e
+
+# Set up in-container socat bridge so Claude CLI can reach the Neovim
+# WebSocket server on the host via the relay set up by claude-sandbox.
+LOCK_FILE=$(ls -t /root/.claude/ide/*.lock 2>/dev/null | head -1)
+if [[ -n "$LOCK_FILE" ]]; then
+  RELAY_PORT=$(basename "$LOCK_FILE" .lock)
+  socat TCP-LISTEN:${RELAY_PORT},bind=127.0.0.1,reuseaddr,fork \
+        TCP:host.docker.internal:${RELAY_PORT} &>/dev/null &
+fi
+
+exec claude "$@"
+EOF
+
+    cat > "$ctx/Dockerfile" <<'EOF'
 FROM node:20-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl ca-certificates ripgrep \
+    git curl ca-certificates ripgrep bash socat jq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g @anthropic-ai/claude-code
 
-RUN useradd -m -u 1000 claude
-USER claude
-WORKDIR /workspace
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["claude"]
-DOCKERFILE
-    echo -e "${GREEN}[sandbox]${NC} Image ready."
+ENTRYPOINT ["/entrypoint.sh"]
+EOF
+
+    docker build --quiet -t "$IMAGE_NAME" "$ctx"
+    rm -rf "$ctx"
+    echo "${GREEN}[sandbox]${NC} Image ready."
   }
 
-  _claude_sandbox_run() {
+  _cs_run() {
     local api_key="$1"
     shift
+    local project_dir="${PWD}"
+    local claude_dir="${project_dir}/.claude"
+    mkdir -p "$claude_dir/ide"
+    rm -f "${claude_dir}/credentials.json"
 
-    echo -e "${BLUE}[sandbox]${NC} Project : ${PWD}"
-    echo -e "${YELLOW}[sandbox]${NC} Mounted : ${PWD} only — no home dir, no SSH keys, no env vars."
+    echo "${BLUE}[sandbox]${NC} Project : ${project_dir}"
+    echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
     echo ""
 
+    # --- Neovim IDE bridge (optional) ---
+    # Requires: socat + jq on the host, claudecode.nvim active in Neovim.
+    # Architecture (Mac — no --network host):
+    #   Claude CLI (container) → 127.0.0.1:RELAY
+    #     → container socat (entrypoint.sh) → host.docker.internal:RELAY
+    #     → host socat (below) → 127.0.0.1:WS_PORT
+    #     → claudecode.nvim WebSocket server
+    local socat_pid="" relay_lock=""
+    if command -v socat &>/dev/null && command -v jq &>/dev/null; then
+      local lock_file ws_port nvim_pid auth_token relay_port
+      lock_file=$(ls -t "$HOME/.claude/ide/"*.lock 2>/dev/null | head -1)
+      if [[ -n "$lock_file" ]]; then
+        ws_port=$(basename "$lock_file" .lock)
+        nvim_pid=$(jq -r '.pid' "$lock_file" 2>/dev/null)
+        auth_token=$(jq -r '.authToken' "$lock_file" 2>/dev/null)
+        if [[ -n "$auth_token" && "$auth_token" != "null" ]]; then
+          relay_port=$((ws_port + 10000))
+          relay_lock="${claude_dir}/ide/${relay_port}.lock"
+
+          # Write bridge lock file into the per-project .claude/ide/ so the
+          # CLI inside the container discovers it at /root/.claude/ide/
+          cat > "$relay_lock" <<LOCKEOF
+{"pid":${nvim_pid},"workspaceFolders":["${project_dir}"],"ideName":"Neovim","transport":"ws","authToken":"${auth_token}"}
+LOCKEOF
+
+          # Host-side relay: accept container connections, forward to Neovim WS
+          socat TCP-LISTEN:${relay_port},bind=0.0.0.0,reuseaddr,fork \
+                TCP:127.0.0.1:${ws_port} &>/dev/null &
+          socat_pid=$!
+
+          echo "${BLUE}[sandbox]${NC} Neovim bridge: WS port ${ws_port} → relay ${relay_port}"
+        fi
+      fi
+    fi
+
     docker run -it --rm \
-      -v "${PWD}:${WORK_DIR}" \
-      --network host \
+      --add-host host.docker.internal:host-gateway \
+      -v "${project_dir}:${project_dir}" \
+      -v "${claude_dir}:/root/.claude" \
       --cap-drop ALL \
-      --cap-add NET_BIND_SERVICE \
-      --security-opt no-new-privs \
       -e ANTHROPIC_API_KEY="${api_key}" \
       -e TERM=xterm-256color \
-      -w "${WORK_DIR}" \
+      -w "${project_dir}" \
       "${IMAGE_NAME}" \
       "$@"
+    local rc=$?
+
+    [[ -n "$socat_pid" ]] && kill "$socat_pid" 2>/dev/null
+    [[ -n "$relay_lock" ]] && rm -f "$relay_lock"
+    return $rc
   }
 
   case "${1:-}" in
     --build)
-      _claude_sandbox_check || return 1
-      _claude_sandbox_build
+      _cs_check || return 1
+      _cs_build
       ;;
     --help|-h)
       echo "Usage: claude-sandbox [--build] [--help] [claude flags]"
       echo ""
-      echo "  (no args)   Fetch API key from 1Password, run Claude in sandbox"
-      echo "  --build     Force rebuild the Docker image"
-      echo "  --help      Show this help"
+      echo "  (no args)   Run Claude Code sandboxed in the current directory"
+      echo "  --build     Rebuild the Docker image"
       echo ""
-      echo "  1Password ref: ${OP_ANTHROPIC_REF}"
-      echo "  Update OP_ANTHROPIC_REF in dotfiles/claude/claude-sandbox.zsh to match your vault."
+      echo "Per-project memory is stored in .claude/ in the current directory."
+      echo "Add .claude/ to your project's .gitignore."
+      echo ""
+      echo "Neovim IDE bridge activates automatically when claudecode.nvim is"
+      echo "running and socat + jq are installed (brew install socat jq)."
       ;;
     *)
-      _claude_sandbox_check || return 1
-      if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
-        _claude_sandbox_build
-      fi
+      _cs_check || return 1
       local api_key
-      api_key=$(_claude_sandbox_fetch_key) || return 1
-      _claude_sandbox_run "$api_key" "$@"
+      api_key=$(_cs_fetch_key) || return 1
+      if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
+        _cs_build
+      fi
+      _cs_run "$api_key" "$@"
       ;;
   esac
 }
