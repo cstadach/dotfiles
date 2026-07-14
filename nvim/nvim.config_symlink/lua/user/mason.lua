@@ -73,4 +73,15 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(lsp_servers),
+  automatic_enable = false,
 }
+
+for server_name, server_settings in pairs(lsp_servers) do
+  vim.lsp.config(server_name, {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = server_settings,
+  })
+end
+
+vim.lsp.enable(vim.tbl_keys(lsp_servers))
