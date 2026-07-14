@@ -78,8 +78,43 @@ require('lazy').setup({
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
     build = 'make tiktoken',
+    opts = {
+      model = 'claude-sonnet-4.6',
+    },
     config = function(_, opts)
+      local function get_history_path()
+        local cwd = vim.fn.getcwd()
+        local result = vim.fn.systemlist('git -C ' .. cwd .. ' rev-parse --show-toplevel')
+        if vim.v.shell_error == 0 and result[1] and result[1] ~= '' then
+          if result[1] == cwd then
+            return cwd
+          end
+        end
+        return nil
+      end
+
+      opts.callback = function(response, source)
+        local path = get_history_path()
+        if path then
+          require('CopilotChat').save('.copilot_session', path)
+        end
+      end
+
       require('CopilotChat').setup(opts)
+
+      vim.api.nvim_create_autocmd('VimEnter', {
+        once = true,
+        callback = function()
+          local path = get_history_path()
+          if path then
+            local history_file = path .. '/.copilot_session.json'
+            if vim.fn.filereadable(history_file) == 1 then
+              require('CopilotChat').load('.copilot_session', path)
+            end
+          end
+        end,
+      })
+
       vim.keymap.set('n', '<leader>aa', function()
         require('CopilotChat').toggle()
       end, { desc = 'Toggle CopilotChat' })

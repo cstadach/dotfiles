@@ -11,3 +11,4 @@
 !.checkov.baseline
 !.pre-commit-config.yaml
 !.pre-commit-config.yml
+.copilot_session.json
