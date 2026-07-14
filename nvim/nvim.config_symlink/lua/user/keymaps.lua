@@ -1,5 +1,6 @@
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
+vim.g.mapleader = "'"
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 -- [[ Basic Keymaps ]]
