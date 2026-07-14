@@ -10,6 +10,7 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
+vim.lsp.log.set_level("off")
 
 require('lazy').setup({
 
