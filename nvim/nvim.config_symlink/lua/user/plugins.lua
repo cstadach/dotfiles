@@ -1,5 +1,7 @@
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+local fs_stat = (vim.uv or vim.loop).fs_stat
+
+if not fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -21,7 +23,6 @@ require('lazy').setup({
   'tpope/vim-abolish',
   'tpope/vim-repeat',
   'tpope/vim-endwise',
-  'tpope/vim-commentary',
   'tpope/vim-sleuth',
   { 'folke/which-key.nvim', opts = {} },
   { 'numToStr/Comment.nvim', opts = {} },
@@ -84,16 +85,16 @@ require('lazy').setup({
     config = function(_, opts)
       local function get_history_path()
         local cwd = vim.fn.getcwd()
-        local result = vim.fn.systemlist('git -C ' .. cwd .. ' rev-parse --show-toplevel')
-        if vim.v.shell_error == 0 and result[1] and result[1] ~= '' then
-          if result[1] == cwd then
-            return cwd
-          end
+        local result = vim.fn.systemlist({ 'git', '-C', cwd, 'rev-parse', '--show-toplevel' })
+
+        if vim.v.shell_error == 0 and result[1] and result[1] ~= '' and result[1] == cwd then
+          return cwd
         end
+
         return nil
       end
 
-      opts.callback = function(response, source)
+      opts.callback = function()
         local path = get_history_path()
         if path then
           require('CopilotChat').save('.copilot_session', path)
@@ -127,7 +128,7 @@ require('lazy').setup({
     dependencies = {
       { 'williamboman/mason.nvim', config = true },
       'williamboman/mason-lspconfig.nvim',
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
       'folke/neodev.nvim',
     },
   },
@@ -217,7 +218,8 @@ require('lazy').setup({
   },
   {
     'iamcco/markdown-preview.nvim',
-    config = function()
+    ft = { 'markdown' },
+    build = function()
       vim.fn['mkdp#util#install']()
     end,
   },
@@ -236,7 +238,6 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     build = ':TSUpdate',
   },
 
