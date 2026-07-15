@@ -311,10 +311,10 @@ require('lazy').setup({
       { 'nvim-lua/plenary.nvim' },
       { 'folke/which-key.nvim' },
     },
-  },
-
   { import = 'custom.plugins' },
 
+},
+  checker = { enabled = true, notify = true, frequency = 86400 },
   performance = {
     rtp = {
       disabled_plugins = {
