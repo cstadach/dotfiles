@@ -2,14 +2,19 @@
 -- this disables Explore
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.mapleader = "'"
+vim.g.maplocalleader = "'"
 
 require "user.plugins"
 require "user.options"
 require "user.keymaps"
-require "user.lsp_signature"
-require "user.luasnip"
-require "user.mason"
-require "user.nvim-cmp"
-require "user.nvim-tree"
-require "user.nvim-treesiter"
-require "user.telescope"
+
+-- Open nvim-tree on startup when no file or directory is given
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    local arg = vim.fn.argv(0)
+    if arg == '' or vim.fn.isdirectory(arg) == 1 then
+      require('nvim-tree.api').tree.open()
+    end
+  end,
+})
