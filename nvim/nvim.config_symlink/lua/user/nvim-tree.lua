@@ -27,8 +27,6 @@ nvim_tree.setup {
   },
 }
 
-vim.keymap.set('n', '<leader>tt', "<cmd>NvimTreeToggle<cr>", {silent = true})
-
 local api = require("nvim-tree.api")
 
 local git_add = function()
