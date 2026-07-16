@@ -96,8 +96,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[include]
-	path = ~/.config/git/gitconfig
 [user]
 	name = Christian
 	email = christian@stadach.com
+[include]
+	path = ~/.config/git/gitconfig
