@@ -297,12 +297,12 @@ require('lazy').setup({
     end,
   },
 
-  -- PlatformIO
   {
     'anurag3301/nvim-platformio.lua',
     cmd = { 'Pioinit', 'Piorun', 'Piolib', 'Piomon', 'Piodebug' },
     cond = function()
       return vim.fn.executable('pio') == 1
+        and vim.fn.filereadable(vim.fn.getcwd() .. '/platformio.ini') == 1
     end,
     dependencies = {
       { 'akinsho/toggleterm.nvim' },
@@ -311,9 +311,7 @@ require('lazy').setup({
       { 'nvim-lua/plenary.nvim' },
       { 'folke/which-key.nvim' },
     },
-  { import = 'custom.plugins' },
-
-},
+  },
   checker = { enabled = true, notify = true, frequency = 86400 },
   performance = {
     rtp = {
