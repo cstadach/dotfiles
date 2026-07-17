@@ -25,7 +25,6 @@ require('lazy').setup({
   { 'tpope/vim-abolish',     event = 'BufReadPost' },
   { 'tpope/vim-endwise',     event = 'InsertEnter' },
   { 'folke/which-key.nvim',  event = 'VeryLazy', opts = {} },
-  { 'numToStr/Comment.nvim', event = 'BufReadPost', opts = {} },
 
   -- Git
   { 'tpope/vim-fugitive',   cmd = { 'Git', 'Gdiff', 'Gblame', 'Gpush', 'Gpull' } },
