@@ -38,9 +38,6 @@ claude-sandbox() {
     local ctx
     ctx=$(mktemp -d)
 
-    # Entrypoint: set up Neovim IDE bridge, then run claude.
-    # The bridge connects container 127.0.0.1:RELAY_PORT to the host socat
-    # which relays to claudecode.nvim's WebSocket server.
     cat > "$ctx/entrypoint.sh" <<'EOF'
 #!/bin/bash
 set -e
@@ -61,7 +58,7 @@ EOF
 FROM node:20-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl ca-certificates ripgrep bash socat jq \
+    git curl ca-certificates ripgrep bash socat jq openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g @anthropic-ai/claude-code
@@ -86,13 +83,6 @@ EOF
     echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
     echo ""
 
-    # --- Neovim IDE bridge (optional) ---
-    # Requires: socat + jq on the host, claudecode.nvim active in Neovim.
-    # Architecture (Mac — no --network host):
-    #   Claude CLI (container) → 127.0.0.1:RELAY
-    #     → container socat (entrypoint.sh) → host.docker.internal:RELAY
-    #     → host socat (below) → 127.0.0.1:WS_PORT
-    #     → claudecode.nvim WebSocket server
     local socat_pid="" relay_lock=""
     if command -v socat &>/dev/null && command -v jq &>/dev/null; then
       local lock_file ws_port nvim_pid auth_token relay_port
@@ -104,24 +94,19 @@ EOF
         if [[ -n "$auth_token" && "$auth_token" != "null" ]]; then
           relay_port=$((ws_port + 10000))
           relay_lock="${claude_dir}/ide/${relay_port}.lock"
-
-          # Write bridge lock file into the per-project .claude/ide/ so the
-          # CLI inside the container discovers it at /root/.claude/ide/
           cat > "$relay_lock" <<LOCKEOF
 {"pid":${nvim_pid},"workspaceFolders":["${project_dir}"],"ideName":"Neovim","transport":"ws","authToken":"${auth_token}"}
 LOCKEOF
-
-          # Host-side relay: accept container connections, forward to Neovim WS
           socat TCP-LISTEN:${relay_port},bind=0.0.0.0,reuseaddr,fork \
                 TCP:127.0.0.1:${ws_port} &>/dev/null &
           socat_pid=$!
-
           echo "${BLUE}[sandbox]${NC} Neovim bridge: WS port ${ws_port} → relay ${relay_port}"
         fi
       fi
     fi
 
     docker run -it --rm \
+      --hostname claude-sandbox \
       --add-host host.docker.internal:host-gateway \
       -v "${project_dir}:${project_dir}" \
       -v "${claude_dir}:/root/.claude" \
@@ -148,6 +133,7 @@ LOCKEOF
       echo "  (no args)   Run Claude Code sandboxed in the current directory"
       echo "  --build     Rebuild the Docker image"
       echo ""
+      echo "On first use Claude will ask you to authenticate via browser."
       echo "Per-project memory is stored in .claude/ in the current directory."
       echo "Add .claude/ to your project's .gitignore."
       echo ""
