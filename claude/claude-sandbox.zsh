@@ -1,13 +1,11 @@
 # dotfiles/claude/claude-sandbox.zsh
 # Auto-sourced by holman dotfiles (topic/*.zsh convention)
 # Runs Claude Code in a sandboxed Docker container with per-project memory.
-# OAuth credentials are fetched from 1Password at runtime (Touch ID) and written
-# into the per-project .claude/ folder — never stored in plaintext long-term.
 # Optionally bridges to a running claudecode.nvim WebSocket server.
 #
 # Requirements:
 #   Docker Desktop running
-#   brew install 1password-cli socat jq
+#   brew install socat jq   (optional, for Neovim bridge)
 #
 # Usage:
 #   claude-sandbox [--build] [--help] [claude flags]
@@ -17,30 +15,12 @@
 
 claude-sandbox() {
   local IMAGE_NAME="claude-sandbox"
-  local OP_KEY_REF="op://Private/Anthropic/credential"
 
   local BLUE='\033[0;34m'
   local GREEN='\033[0;32m'
   local YELLOW='\033[1;33m'
   local RED='\033[0;31m'
   local NC='\033[0m'
-
-  _cs_write_credentials() {
-    echo "${BLUE}[sandbox]${NC} Fetching credentials from 1Password (Touch ID)..."
-    local value
-    value=$(op read "$OP_KEY_REF" 2>/dev/null)
-    if [[ -z "$value" ]]; then
-      echo "${RED}[sandbox]${NC} Could not read from 1Password: ${OP_KEY_REF}" >&2
-      return 1
-    fi
-    # If value is already a JSON object write it directly, otherwise wrap it
-    # as a claudeAiOauthToken so Claude Code recognises it as an OAuth session.
-    if [[ "$value" == \{* ]]; then
-      echo "$value" > "${1}"
-    else
-      printf '{"claudeAiOauthToken":"%s"}\n' "$value" > "${1}"
-    fi
-  }
 
   _cs_check() {
     if ! command -v docker &>/dev/null; then
@@ -49,10 +29,6 @@ claude-sandbox() {
     fi
     if ! docker info &>/dev/null 2>&1; then
       echo "${RED}[sandbox]${NC} Docker not running — start Docker Desktop." >&2
-      return 1
-    fi
-    if ! command -v op &>/dev/null; then
-      echo "${RED}[sandbox]${NC} 1Password CLI not found — brew install 1password-cli" >&2
       return 1
     fi
   }
@@ -105,7 +81,6 @@ EOF
     local project_dir="${PWD}"
     local claude_dir="${project_dir}/.claude"
     mkdir -p "$claude_dir/ide"
-    _cs_write_credentials "${claude_dir}/credentials.json" || return 1
 
     echo "${BLUE}[sandbox]${NC} Project : ${project_dir}"
     echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
