@@ -24,8 +24,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- clear search on return
 map('n', '<cr><cr>', ':nohlsearch<cr>')
 -- Diagnostic keymaps
-map('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
-map('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic message" })
+map('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to previous diagnostic message" })
+map('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic message" })
 map('n', '<leader>e', vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 map('n', '<leader>q', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 

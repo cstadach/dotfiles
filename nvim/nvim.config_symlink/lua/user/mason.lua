@@ -20,7 +20,7 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
+    vim.lsp.buf.format({ async = true })
   end, { desc = 'Format current buffer with LSP' })
 end
 
@@ -47,13 +47,13 @@ local lsp_servers = {
 
   lua_ls = {
     Lua = {
+      runtime = { version = 'LuaJIT' },
+      diagnostics = { globals = { 'vim' } },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
     },
   },
 }
-
-require('neodev').setup()
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -62,13 +62,15 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(lsp_servers),
-  handlers = {
-    function(server_name)
-      require('lspconfig')[server_name].setup {
-        capabilities = capabilities,
-        on_attach    = on_attach,
-        settings     = lsp_servers[server_name],
-      }
-    end,
-  },
+  automatic_enable = false,
 }
+
+for server_name, server_settings in pairs(lsp_servers) do
+  vim.lsp.config(server_name, {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = server_settings,
+  })
+end
+
+vim.lsp.enable(vim.tbl_keys(lsp_servers))
