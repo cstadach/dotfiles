@@ -69,7 +69,11 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 EOF
 
-    docker build --quiet -t "$IMAGE_NAME" "$ctx"
+    docker build --no-cache -t "$IMAGE_NAME" "$ctx" || {
+      rm -rf "$ctx"
+      echo "${RED}[sandbox]${NC} Image build failed." >&2
+      return 1
+    }
     rm -rf "$ctx"
     echo "${GREEN}[sandbox]${NC} Image ready."
   }
