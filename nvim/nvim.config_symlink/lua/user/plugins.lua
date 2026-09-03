@@ -70,7 +70,18 @@ require('lazy').setup({
         terraform = { 'terraform_fmt' },
         hcl       = { 'terraform_fmt' },
       },
-      format_on_save = { timeout_ms = 500, lsp_fallback = true },
+      format_on_save = function(bufnr)
+        -- Never format fugitive index/object buffers or other special buffers,
+        -- otherwise staging single hunks via :Gdiff breaks.
+        local name = vim.api.nvim_buf_get_name(bufnr)
+        if name:match('^fugitive://') or name:match('^gitsigns://') then
+          return nil
+        end
+        if vim.bo[bufnr].buftype ~= '' then
+          return nil
+        end
+        return { timeout_ms = 500, lsp_format = 'fallback' }
+      end,
     },
   },
   {
