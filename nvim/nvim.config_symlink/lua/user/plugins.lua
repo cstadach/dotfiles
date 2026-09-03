@@ -129,7 +129,7 @@ require('lazy').setup({
       { '<leader>aa', function() require('CopilotChat').toggle() end, desc = 'Toggle CopilotChat' },
     },
     opts = {
-      model = 'claude-sonnet-4.6',
+      model = 'claude-sonnet-5',
     },
     config = function(_, opts)
       local function get_history_path()
