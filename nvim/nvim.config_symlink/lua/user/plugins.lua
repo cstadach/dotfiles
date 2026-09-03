@@ -63,16 +63,12 @@ require('lazy').setup({
     event = 'BufWritePre',
     opts = {
       formatters_by_ft = {
-        go         = { 'goimports', 'gofmt' },
-        python     = { 'ruff_format' },
-        typescript = { 'prettier' },
-        javascript = { 'prettier' },
-        yaml       = { 'prettier' },
-        json       = { 'prettier' },
-        sh         = { 'shfmt' },
-        bash       = { 'shfmt' },
-        terraform  = { 'terraform_fmt' },
-        hcl        = { 'terraform_fmt' },
+        go        = { 'goimports', 'gofmt' },
+        python    = { 'ruff_format' },
+        sh        = { 'shfmt' },
+        bash      = { 'shfmt' },
+        terraform = { 'terraform_fmt' },
+        hcl       = { 'terraform_fmt' },
       },
       format_on_save = { timeout_ms = 500, lsp_fallback = true },
     },
@@ -81,7 +77,7 @@ require('lazy').setup({
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     opts = {
       ensure_installed = {
-        'goimports', 'ruff', 'prettier', 'shfmt',
+        'goimports', 'ruff', 'shfmt',
         'tflint', 'ansible-lint',
       },
     },
