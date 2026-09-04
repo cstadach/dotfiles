@@ -76,7 +76,7 @@
 [push]
   default = current
 [diff]
-  tool = Kaleidoscope
+  tool = diffview
 [filter "media"]
   clean = git-media-clean %f
   smudge = git-media-smudge %f
@@ -92,7 +92,7 @@
   prompt = false
   keepBackup = false
 [mergetool "diffview"]
-  cmd = nvim -n -c "DiffviewOpen" "$MERGE"
+  cmd = nvim -c "DiffviewOpen" "$MERGED"
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
