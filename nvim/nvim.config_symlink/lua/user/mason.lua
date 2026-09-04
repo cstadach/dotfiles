@@ -32,20 +32,30 @@ local lsp_servers = {
   bashls      = {},
   ansiblels   = {},
 
-  yamlls = {
+  yamlls      = {
     yaml = {
-      schemas = {
-        ['https://json.schemastore.org/gitlab-ci.json']       = '/.gitlab-ci.yml',
+      schemas    = {
+        ['https://json.schemastore.org/gitlab-ci.json'] = {
+          '/.gitlab-ci.yml',
+          'devops/gitlab-ci-configurations/**/*.yml',
+        },
         ['https://json.schemastore.org/ansible-playbook.json'] = '**/playbooks/*.yml',
-        kubernetes = { '*.yaml', '*.yml' },
+        kubernetes = {
+          '**/deployment.yaml',
+          '**/ingress.yaml',
+          '**/kustomization.yaml',
+          '**/service.yaml',
+          '**/httproute.yaml',
+          '**/refgrants.yaml',
+        },
       },
-      validate  = true,
+      validate   = true,
       completion = true,
-      hover     = true,
+      hover      = true,
     },
   },
 
-  lua_ls = {
+  lua_ls      = {
     Lua = {
       runtime = { version = 'LuaJIT' },
       diagnostics = { globals = { 'vim' } },
