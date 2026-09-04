@@ -31,7 +31,12 @@ local lsp_servers = {
   terraformls = {},
   ts_ls       = {},
   bashls      = {},
-  ansiblels   = {},
+  ansiblels   = {
+    filetypes = { 'yaml.ansible' },
+    ansible   = {
+      path = { ansibleLint = { enabled = false } },
+    },
+  },
   jsonls      = {
     json = {
       schemas = schemastore_ok and schemastore.json.schemas() or {},
@@ -39,6 +44,7 @@ local lsp_servers = {
     },
   },
   yamlls      = {
+    filetypes = { 'yaml' }, -- yaml.ansible is excluded, so ansiblels handles it exclusively
     yaml = {
       format      = {
         enable = true,
@@ -51,7 +57,6 @@ local lsp_servers = {
             '/.gitlab-ci.yml',
             'devops/gitlab-ci-configurations/**/*.yml',
           },
-          ['https://json.schemastore.org/ansible-playbook.json'] = '**/playbooks/*.yml',
           kubernetes = {
             '**/deployment.yaml',
             '**/ingress.yaml',
@@ -99,3 +104,8 @@ for server_name, server_settings in pairs(lsp_servers) do
 end
 
 vim.lsp.enable(vim.tbl_keys(lsp_servers))
+vim.filetype.add({
+  pattern = {
+    ['.*/ansible/.*%.ya?ml'] = 'yaml.ansible',
+  },
+})
