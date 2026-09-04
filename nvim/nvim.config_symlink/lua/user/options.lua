@@ -38,3 +38,4 @@ vim.wo.signcolumn = 'yes'
 -- Disable LSP logging
 vim.lsp.log.set_level("off")
 
+vim.diagnostic.config({ jump = { float = true } })
