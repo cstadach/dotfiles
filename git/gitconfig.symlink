@@ -49,6 +49,8 @@
   wtf = !$ZSH/bin/git-wtf
   rank-contributers = !$ZSH/bin/git-rank-contributers
   count = !git shortlog -sn
+  gone = !git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads | awk '$2 == \"[gone]\" {print $1}'
+  prune-gone = !git gone | xargs -r git branch -d
   lg = log --oneline
   alias-master-as-main = !git symbolic-ref refs/heads/main refs/heads/master && git symbolic-ref refs/remotes/origin/main refs/remotes/origin/master && git switch main
 [branch]
