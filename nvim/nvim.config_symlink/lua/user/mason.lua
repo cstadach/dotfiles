@@ -1,3 +1,4 @@
+local schemastore_ok, schemastore = pcall(require, 'schemastore')
 local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
@@ -31,27 +32,36 @@ local lsp_servers = {
   ts_ls       = {},
   bashls      = {},
   ansiblels   = {},
-
+  jsonls      = {
+    json = {
+      schemas = schemastore_ok and schemastore.json.schemas() or {},
+      validate = { enable = true },
+    },
+  },
   yamlls      = {
     yaml = {
-      schemas    = {
-        ['https://json.schemastore.org/gitlab-ci.json'] = {
-          '/.gitlab-ci.yml',
-          'devops/gitlab-ci-configurations/**/*.yml',
-        },
-        ['https://json.schemastore.org/ansible-playbook.json'] = '**/playbooks/*.yml',
-        kubernetes = {
-          '**/deployment.yaml',
-          '**/ingress.yaml',
-          '**/kustomization.yaml',
-          '**/service.yaml',
-          '**/httproute.yaml',
-          '**/refgrants.yaml',
-        },
-      },
-      validate   = true,
-      completion = true,
-      hover      = true,
+      schemas     = vim.tbl_extend('force',
+        schemastore_ok and schemastore.yaml.schemas() or {},
+        {
+          ['https://json.schemastore.org/gitlab-ci.json'] = {
+            '/.gitlab-ci.yml',
+            'devops/gitlab-ci-configurations/**/*.yml',
+          },
+          ['https://json.schemastore.org/ansible-playbook.json'] = '**/playbooks/*.yml',
+          kubernetes = {
+            '**/deployment.yaml',
+            '**/ingress.yaml',
+            '**/kustomization.yaml',
+            '**/service.yaml',
+            '**/httproute.yaml',
+            '**/refgrants.yaml',
+          },
+        }
+      ),
+      schemaStore = { enable = false, url = '' },
+      validate    = true,
+      completion  = true,
+      hover       = true,
     },
   },
 

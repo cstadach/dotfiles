@@ -23,11 +23,11 @@ require('lazy').setup({
   'tpope/vim-surround',
   'tpope/vim-repeat',
   'tpope/vim-sleuth',
-  { 'tpope/vim-dispatch',   cmd = { 'Dispatch', 'Make', 'Focus', 'Start' } },
-  { 'tpope/vim-unimpaired', event = 'BufReadPost' },
-  { 'tpope/vim-abolish',    event = 'BufReadPost' },
-  { 'tpope/vim-endwise',    event = 'InsertEnter' },
-  { 'folke/which-key.nvim', event = 'VeryLazy', opts = {} },
+  { 'tpope/vim-dispatch',     cmd = { 'Dispatch', 'Make', 'Focus', 'Start' } },
+  { 'tpope/vim-unimpaired',   event = 'BufReadPost' },
+  { 'tpope/vim-abolish',      event = 'BufReadPost' },
+  { 'tpope/vim-endwise',      event = 'InsertEnter' },
+  { 'folke/which-key.nvim',   event = 'VeryLazy',                                              opts = {} },
 
   -- Git
   { 'tpope/vim-fugitive',     cmd = { 'Git', 'Gdiff', 'Gblame', 'Gpush', 'Gpull' } },
@@ -53,7 +53,7 @@ require('lazy').setup({
     'hashivim/vim-terraform',
     ft = { 'terraform', 'tf', 'hcl' },
     config = function()
-      vim.g.terraform_fmt_on_save = 0  -- conform.nvim handles terraform formatting
+      vim.g.terraform_fmt_on_save = 0 -- conform.nvim handles terraform formatting
     end,
   },
 
@@ -185,13 +185,14 @@ require('lazy').setup({
     },
     dependencies = { 'Bilal2453/luvit-meta' },
   },
+  { 'b0o/schemastore.nvim',           lazy = true },
   {
     'neovim/nvim-lspconfig',
     event = 'BufReadPre',
     dependencies = {
       { 'williamboman/mason.nvim', config = true },
       'williamboman/mason-lspconfig.nvim',
-      { 'j-hui/fidget.nvim', event = 'LspAttach', opts = {} },
+      { 'j-hui/fidget.nvim',       event = 'LspAttach', opts = {} },
     },
     config = function()
       require 'user.mason'
@@ -339,20 +340,24 @@ require('lazy').setup({
     version = '*',
     cmd = 'Telescope',
     keys = {
-      { '<leader>ff', '<cmd>Telescope find_files<cr>',   desc = '[F]ind [F]iles' },
-      { '<leader>fg', '<cmd>Telescope live_grep<cr>',    desc = '[F]ind by [G]rep' },
-      { '<leader>fw', '<cmd>Telescope grep_string<cr>',  desc = '[F]ind current [W]ord' },
-      { '<leader>fb', '<cmd>Telescope buffers<cr>',      desc = '[F]ind [B]uffers' },
-      { '<leader>fh', '<cmd>Telescope help_tags<cr>',    desc = '[F]ind [H]elp' },
-      { '<leader>fd', '<cmd>Telescope diagnostics<cr>',  desc = '[F]ind [D]iagnostics' },
-      { '<leader>fr', '<cmd>Telescope lsp_references<cr>', desc = '[F]ind [R]eferences' },
-      { '<leader>?',  '<cmd>Telescope oldfiles<cr>',     desc = '[?] Find recently opened files' },
-      { '<leader><space>', '<cmd>Telescope buffers<cr>', desc = '[ ] Find existing buffers' },
-      { '<leader>/',  function()
-        require('telescope.builtin').current_buffer_fuzzy_find(
-          require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
-        )
-      end, desc = '[/] Fuzzily search in current buffer' },
+      { '<leader>ff',      '<cmd>Telescope find_files<cr>',     desc = '[F]ind [F]iles' },
+      { '<leader>fg',      '<cmd>Telescope live_grep<cr>',      desc = '[F]ind by [G]rep' },
+      { '<leader>fw',      '<cmd>Telescope grep_string<cr>',    desc = '[F]ind current [W]ord' },
+      { '<leader>fb',      '<cmd>Telescope buffers<cr>',        desc = '[F]ind [B]uffers' },
+      { '<leader>fh',      '<cmd>Telescope help_tags<cr>',      desc = '[F]ind [H]elp' },
+      { '<leader>fd',      '<cmd>Telescope diagnostics<cr>',    desc = '[F]ind [D]iagnostics' },
+      { '<leader>fr',      '<cmd>Telescope lsp_references<cr>', desc = '[F]ind [R]eferences' },
+      { '<leader>?',       '<cmd>Telescope oldfiles<cr>',       desc = '[?] Find recently opened files' },
+      { '<leader><space>', '<cmd>Telescope buffers<cr>',        desc = '[ ] Find existing buffers' },
+      {
+        '<leader>/',
+        function()
+          require('telescope.builtin').current_buffer_fuzzy_find(
+            require('telescope.themes').get_dropdown { winblend = 10, previewer = false }
+          )
+        end,
+        desc = '[/] Fuzzily search in current buffer'
+      },
     },
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
@@ -372,7 +377,7 @@ require('lazy').setup({
     cmd = { 'Pioinit', 'Piorun', 'Piolib', 'Piomon', 'Piodebug' },
     cond = function()
       return vim.fn.executable('pio') == 1
-        and vim.fn.filereadable(vim.fn.getcwd() .. '/platformio.ini') == 1
+          and vim.fn.filereadable(vim.fn.getcwd() .. '/platformio.ini') == 1
     end,
     dependencies = {
       { 'akinsho/toggleterm.nvim' },
