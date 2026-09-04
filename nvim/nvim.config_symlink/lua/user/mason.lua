@@ -43,7 +43,7 @@ local lsp_servers = {
       schemas     = vim.tbl_extend('force',
         schemastore_ok and schemastore.yaml.schemas() or {},
         {
-          ['https://json.schemastore.org/gitlab-ci.json'] = {
+          ['https://gitlab.com/gitlab-org/gitlab-foss/-/raw/master/app/assets/javascripts/editor/schema/ci.json'] = {
             '/.gitlab-ci.yml',
             'devops/gitlab-ci-configurations/**/*.yml',
           },
@@ -59,6 +59,7 @@ local lsp_servers = {
         }
       ),
       schemaStore = { enable = false, url = '' },
+      customTags  = { '!reference sequence' },
       validate    = true,
       completion  = true,
       hover       = true,
