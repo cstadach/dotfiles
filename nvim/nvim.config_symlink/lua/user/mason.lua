@@ -40,6 +40,10 @@ local lsp_servers = {
   },
   yamlls      = {
     yaml = {
+      format      = {
+        enable = true,
+        singleQuote = true,
+      },
       schemas     = vim.tbl_extend('force',
         schemastore_ok and schemastore.yaml.schemas() or {},
         {
