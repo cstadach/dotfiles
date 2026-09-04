@@ -107,5 +107,9 @@ vim.lsp.enable(vim.tbl_keys(lsp_servers))
 vim.filetype.add({
   pattern = {
     ['.*/ansible/.*%.ya?ml'] = 'yaml.ansible',
+    ['.*%.([%w]+)%.j2'] = function(_, _, ext)
+      return ext .. '.jinja'
+    end,
+    ['.*%.j2'] = 'jinja',
   },
 })
