@@ -16,7 +16,7 @@
   ff = merge --ff-only
   pullff = pull --ff-only
   noff = merge --no-ff
-  fa = fetch --all
+  fa = fetch --all --prune
   pom = push origin master
   ptrack = push -u
   b = branch
@@ -50,7 +50,7 @@
   rank-contributers = !$ZSH/bin/git-rank-contributers
   count = !git shortlog -sn
   lg = log --oneline
-	alias-master-as-main = !git symbolic-ref refs/heads/main refs/heads/master && git symbolic-ref refs/remotes/origin/main refs/remotes/origin/master && git switch main
+  alias-master-as-main = !git symbolic-ref refs/heads/main refs/heads/master && git symbolic-ref refs/remotes/origin/main refs/remotes/origin/master && git switch main
 [branch]
   autoSetupMerge = true
 [init]
