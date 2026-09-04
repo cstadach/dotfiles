@@ -37,12 +37,12 @@
         #   ra = recent commits, all reachable refs
         #   l = all commits, only current branch
         #   la = all commits, all reachable refs
-  head = !git l -1
+  head = log -1 --pretty=oneline --abbrev-commit
   h = !git head
-  hp = !source ~/.githelpers && show_git_head
-  r = !git l -30
+  hp = show HEAD
+  r = log -30 --oneline
   ra = !git r --all
-  l = !source ~/.githelpers && pretty_git_log
+  l = log --graph --pretty=oneline --abbrev-commit
   la = !git l --all
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   promote = !$ZSH/bin/git-promote
