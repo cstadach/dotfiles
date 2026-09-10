@@ -80,6 +80,9 @@ require('lazy').setup({
         if vim.bo[bufnr].buftype ~= '' then
           return nil
         end
+        if vim.bo[bufnr].filetype:match('^yaml') then
+          return nil
+        end
         return { timeout_ms = 500, lsp_format = 'fallback' }
       end,
     },
