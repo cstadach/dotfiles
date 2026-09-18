@@ -1,20 +1,27 @@
 # dotfiles/claude/claude-sandbox.zsh
 # Auto-sourced by holman dotfiles (topic/*.zsh convention)
 # Runs Claude Code in a sandboxed Docker container with per-project memory.
-# Optionally bridges to a running claudecode.nvim WebSocket server.
+# A long-lived Claude Pro/Max token (from `claude setup-token`) is stored in
+# 1Password and injected via CLAUDE_CODE_OAUTH_TOKEN so normal runs skip the
+# browser login entirely. Optionally bridges to a running claudecode.nvim
+# WebSocket server.
 #
 # Requirements:
 #   Docker Desktop running
-#   brew install socat jq   (optional, for Neovim bridge)
+#   brew install 1password-cli socat jq   (socat/jq optional, for Neovim bridge)
 #
 # Usage:
-#   claude-sandbox [--build] [--help] [claude flags]
+#   claude-sandbox [--build] [--login] [--help] [claude flags]
 #
-# Per-project .claude/ is created in the current directory.
-# Add .claude/ to your project's .gitignore.
+# Per-project .claude/ is created in the current directory (conversation
+# memory only — auth no longer lives here). Add .claude/ to your project's
+# .gitignore. -r/--resume is prepended by default on normal runs.
 
 claude-sandbox() {
   local IMAGE_NAME="claude-sandbox"
+  local OP_ITEM="Anthropic"
+  local OP_VAULT="Private"
+  local OP_TOKEN_REF="op://${OP_VAULT}/${OP_ITEM}/credential"
 
   local BLUE='\033[0;34m'
   local GREEN='\033[0;32m'
@@ -29,6 +36,44 @@ claude-sandbox() {
     fi
     if ! docker info &>/dev/null 2>&1; then
       echo "${RED}[sandbox]${NC} Docker not running — start Docker Desktop." >&2
+      return 1
+    fi
+  }
+
+  _cs_login() {
+    _cs_check || return 1
+    if ! command -v op &>/dev/null; then
+      echo "${RED}[sandbox]${NC} 1Password CLI not found — brew install 1password-cli" >&2
+      return 1
+    fi
+    if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
+      _cs_build
+    fi
+
+    echo "${BLUE}[sandbox]${NC} Starting Claude Pro/Max login (claude setup-token)..."
+    echo "${YELLOW}[sandbox]${NC} Follow the link, authorize in the browser, then copy the token it prints."
+    echo ""
+    docker run -it --rm \
+      --hostname claude-sandbox \
+      --cap-drop ALL \
+      -e TERM=xterm-256color \
+      "${IMAGE_NAME}" \
+      setup-token
+
+    echo ""
+    local token
+    read -rs "token?Paste the token printed above: "
+    echo ""
+    if [[ -z "$token" ]]; then
+      echo "${RED}[sandbox]${NC} No token entered — aborting." >&2
+      return 1
+    fi
+
+    if op item edit "$OP_ITEM" --vault "$OP_VAULT" "credential=${token}" &>/dev/null \
+      || op item create --category "API Credential" --title "$OP_ITEM" --vault "$OP_VAULT" "credential=${token}" &>/dev/null; then
+      echo "${GREEN}[sandbox]${NC} Token saved to 1Password (${OP_TOKEN_REF})."
+    else
+      echo "${RED}[sandbox]${NC} Failed to save token to 1Password." >&2
       return 1
     fi
   }
@@ -82,9 +127,25 @@ EOF
     local project_dir="${PWD}"
     local claude_dir="${project_dir}/.claude"
     mkdir -p "$claude_dir/ide"
+    [[ -s "${claude_dir}/claude.json" ]] || echo '{}' > "${claude_dir}/claude.json"
 
     echo "${BLUE}[sandbox]${NC} Project : ${project_dir}"
     echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
+
+    local oauth_token=""
+    if command -v op &>/dev/null; then
+      oauth_token=$(op read "$OP_TOKEN_REF" 2>/dev/null)
+    fi
+    if [[ -z "$oauth_token" ]]; then
+      echo "${YELLOW}[sandbox]${NC} No saved token — running login first."
+      _cs_login || return 1
+      oauth_token=$(op read "$OP_TOKEN_REF" 2>/dev/null)
+    fi
+    local -a auth_args=()
+    if [[ -n "$oauth_token" ]]; then
+      auth_args=(-e "CLAUDE_CODE_OAUTH_TOKEN=${oauth_token}")
+      echo "${GREEN}[sandbox]${NC} Auth    : token loaded from 1Password"
+    fi
     echo ""
 
     local socat_pid="" relay_lock=""
@@ -114,8 +175,10 @@ LOCKEOF
       --add-host host.docker.internal:host-gateway \
       -v "${project_dir}:${project_dir}" \
       -v "${claude_dir}:/root/.claude" \
+      -v "${claude_dir}/claude.json:/root/.claude.json" \
       --cap-drop ALL \
       -e TERM=xterm-256color \
+      "${auth_args[@]}" \
       -w "${project_dir}" \
       "${IMAGE_NAME}" \
       "$@"
@@ -131,13 +194,19 @@ LOCKEOF
       _cs_check || return 1
       _cs_build
       ;;
+    --login)
+      _cs_login
+      ;;
     --help|-h)
-      echo "Usage: claude-sandbox [--build] [--help] [claude flags]"
+      echo "Usage: claude-sandbox [--build] [--login] [--help] [claude flags]"
       echo ""
       echo "  (no args)   Run Claude Code sandboxed in the current directory"
+      echo "              (-r/--resume is prepended automatically)"
       echo "  --build     Rebuild the Docker image"
+      echo "  --login     Generate a long-lived Pro/Max token, save it to 1Password"
       echo ""
-      echo "On first use Claude will ask you to authenticate via browser."
+      echo "Auth is loaded automatically from 1Password (${OP_TOKEN_REF})."
+      echo "If no token is saved yet, --login runs automatically on first use."
       echo "Per-project memory is stored in .claude/ in the current directory."
       echo "Add .claude/ to your project's .gitignore."
       echo ""
@@ -149,7 +218,7 @@ LOCKEOF
       if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
         _cs_build
       fi
-      _cs_run "$@"
+      _cs_run -r "$@"
       ;;
   esac
 }
