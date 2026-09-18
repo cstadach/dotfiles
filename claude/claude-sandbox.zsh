@@ -11,7 +11,7 @@
 #   brew install 1password-cli socat jq   (socat/jq optional, for Neovim bridge)
 #
 # Usage:
-#   claude-sandbox [--build] [--login] [--help] [claude flags]
+#   claude-sandbox [--build] [--login] [--save-template] [--help] [claude flags]
 #
 # Per-project .claude/ is created in the current directory (conversation
 # memory only — auth no longer lives here). Add .claude/ to your project's
@@ -22,6 +22,7 @@ claude-sandbox() {
   local OP_ITEM="Anthropic"
   local OP_VAULT="Private"
   local OP_TOKEN_REF="op://${OP_VAULT}/${OP_ITEM}/credential"
+  local HOME_TEMPLATE="${HOME}/.claude-sandbox/claude.json.template"
 
   local BLUE='\033[0;34m'
   local GREEN='\033[0;32m'
@@ -78,6 +79,18 @@ claude-sandbox() {
     fi
   }
 
+  _cs_save_template() {
+    local claude_dir="${PWD}/.claude"
+    if [[ ! -s "${claude_dir}/claude.json" ]]; then
+      echo "${RED}[sandbox]${NC} No ${claude_dir}/claude.json found — run claude-sandbox here first and complete login." >&2
+      return 1
+    fi
+    mkdir -p "${HOME_TEMPLATE:h}"
+    cp "${claude_dir}/claude.json" "$HOME_TEMPLATE"
+    echo "${GREEN}[sandbox]${NC} Saved onboarding template to ${HOME_TEMPLATE}"
+    echo "${YELLOW}[sandbox]${NC} New projects will now start pre-onboarded."
+  }
+
   _cs_build() {
     echo "${BLUE}[sandbox]${NC} Building image..."
     local ctx
@@ -127,7 +140,14 @@ EOF
     local project_dir="${PWD}"
     local claude_dir="${project_dir}/.claude"
     mkdir -p "$claude_dir/ide"
-    [[ -s "${claude_dir}/claude.json" ]] || echo '{}' > "${claude_dir}/claude.json"
+    if [[ ! -s "${claude_dir}/claude.json" ]]; then
+      if [[ -s "$HOME_TEMPLATE" ]]; then
+        cp "$HOME_TEMPLATE" "${claude_dir}/claude.json"
+        echo "${GREEN}[sandbox]${NC} Seeded claude.json from home template (onboarding pre-completed)"
+      else
+        echo '{}' > "${claude_dir}/claude.json"
+      fi
+    fi
 
     echo "${BLUE}[sandbox]${NC} Project : ${project_dir}"
     echo "${YELLOW}[sandbox]${NC} Isolated: only ${project_dir} is mounted (no home dir, no SSH keys)."
@@ -197,13 +217,18 @@ LOCKEOF
     --login)
       _cs_login
       ;;
+    --save-template)
+      _cs_save_template
+      ;;
     --help|-h)
-      echo "Usage: claude-sandbox [--build] [--login] [--help] [claude flags]"
+      echo "Usage: claude-sandbox [--build] [--login] [--save-template] [--help] [claude flags]"
       echo ""
-      echo "  (no args)   Run Claude Code sandboxed in the current directory"
-      echo "              (-r/--resume is prepended automatically)"
-      echo "  --build     Rebuild the Docker image"
-      echo "  --login     Generate a long-lived Pro/Max token, save it to 1Password"
+      echo "  (no args)        Run Claude Code sandboxed in the current directory"
+      echo "                   (-r/--resume is prepended automatically)"
+      echo "  --build          Rebuild the Docker image"
+      echo "  --login          Generate a long-lived Pro/Max token, save it to 1Password"
+      echo "  --save-template  Save this project's onboarded claude.json as the seed"
+      echo "                   for new projects (~/.claude-sandbox/claude.json.template)"
       echo ""
       echo "Auth is loaded automatically from 1Password (${OP_TOKEN_REF})."
       echo "If no token is saved yet, --login runs automatically on first use."
