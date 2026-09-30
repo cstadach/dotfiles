@@ -243,7 +243,7 @@ LOCKEOF
       if ! docker image inspect "$IMAGE_NAME" &>/dev/null 2>&1; then
         _cs_build
       fi
-      _cs_run -r "$@"
+      _cs_run "$@"
       ;;
   esac
 }
